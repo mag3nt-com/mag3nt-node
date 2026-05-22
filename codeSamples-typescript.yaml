@@ -1,0 +1,811 @@
+overlay: 1.0.0
+info:
+  title: CodeSamples overlay for typescript target
+  version: 0.0.0
+actions:
+  - target: $["paths"]["/api/ap2/agent-card"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: ap2GetAgentCard
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.ap2.ap2GetAgentCard();
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/ap2/execute"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: ap2Execute
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.ap2.ap2Execute({
+                cardId: "<id>",
+                cardToken: "<value>",
+                amount: 7776.54,
+              });
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/ap2/mandate"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: ap2CreateMandate
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.ap2.ap2CreateMandate({
+                cardId: "<id>",
+                cardToken: "<value>",
+                amount: 173.14,
+                merchant: "<value>",
+              });
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/ap2/mandates/{card_id}"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: ap2ListMandates
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.ap2.ap2ListMandates("<id>");
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/ap2/payment-methods"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: ap2ListPaymentMethods
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.ap2.ap2ListPaymentMethods();
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/balance"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: fundingGetBalance
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.funding.fundingGetBalance();
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/cards"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: cardsList
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.cards.cardsList();
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/cards/{id}/claim"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: cardsClaim
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.cards.cardsClaim("<id>", {
+                token: "<value>",
+              });
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/cards/{id}/controls"]["patch"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: cardsUpdateControls
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.cards.cardsUpdateControls("<id>", {});
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/cards/{id}/freeze"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: cardsFreeze
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.cards.cardsFreeze("<id>");
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/cards/{id}/transactions"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: cardsListTransactions
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.cards.cardsListTransactions("<id>");
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/cards/{id}/unfreeze"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: cardsUnfreeze
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.cards.cardsUnfreeze("<id>");
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/config"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: statusGetConfig
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt();
+
+            async function run() {
+              const result = await mag3nt.status.statusGetConfig();
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/funding/tokens"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: fundingListTokens
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt();
+
+            async function run() {
+              const result = await mag3nt.funding.fundingListTokens();
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/issue"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: cardsCreate
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.cards.cardsCreate({
+                purpose: "Research Agent",
+                limitAmount: 50,
+              });
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/issue/bulk"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: cardsBulkCreate
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.cards.cardsBulkCreate({
+                cards: [],
+              });
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/keys"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: keysList
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.keys.keysList();
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/keys/generate"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: keysCreate
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.keys.keysCreate();
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/keys/validate"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: keysValidate
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.keys.keysValidate();
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/keys/{hash}"]["delete"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: keysRevoke
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.keys.keysRevoke("<value>");
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/mpp/discover"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: mppDiscover
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.mpp.mppDiscover("https://dutiful-gallery.name/");
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/mpp/pay"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: mppPay
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.mpp.mppPay({
+                cardId: "<id>",
+                cardToken: "<value>",
+                amount: 7359.99,
+              });
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/mpp/receive"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: mppReceive
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.mpp.mppReceive({});
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/mpp/session"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: mppCreateSession
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.mpp.mppCreateSession({
+                cardId: "<id>",
+                cardToken: "<value>",
+                merchant: "<value>",
+              });
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/mpp/stream/close"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: mppStreamsClose
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.mpp.mppStreamsClose({
+                streamId: "<id>",
+              });
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/mpp/stream/open"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: mppStreamsOpen
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.mpp.mppStreamsOpen({
+                cardId: "<id>",
+                cardToken: "<value>",
+                budget: 8538.9,
+                tickAmount: 1381.56,
+              });
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/mpp/stream/tick"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: mppStreamsTick
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.mpp.mppStreamsTick({
+                streamId: "<id>",
+                cardId: "<id>",
+                cardToken: "<value>",
+              });
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/mpp/stream/{id}"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: mppStreamsGet
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.mpp.mppStreamsGet("<id>");
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/pay/{code}/prepare"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: payLinksPrepare
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt();
+
+            async function run() {
+              const result = await mag3nt.payLinks.payLinksPrepare("<value>");
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/pay/{code}/resolve"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: payLinksResolve
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt();
+
+            async function run() {
+              const result = await mag3nt.payLinks.payLinksResolve("<value>");
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/pay/{code}/settle"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: payLinksSettle
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt();
+
+            async function run() {
+              const result = await mag3nt.payLinks.payLinksSettle("<value>", {});
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/paylinks"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: payLinksList
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.payLinks.payLinksList();
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/paylinks"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: payLinksCreate
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.payLinks.payLinksCreate({
+                cardId: "<id>",
+              });
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/paylinks/{code}"]["delete"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: payLinksCancel
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.payLinks.payLinksCancel("<value>");
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/paylinks/{code}"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: payLinksGet
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt();
+
+            async function run() {
+              const result = await mag3nt.payLinks.payLinksGet("<value>");
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/paylinks/{code}/status"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: payLinksGetStatus
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt();
+
+            async function run() {
+              const result = await mag3nt.payLinks.payLinksGetStatus("<value>");
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/settlement/status/{txn_id}"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: settlementGetStatus
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.settlement.settlementGetStatus("<id>");
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/status"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: statusGet
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt();
+
+            async function run() {
+              const result = await mag3nt.status.statusGet();
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/x402/discover"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: x402Discover
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.x402.x402Discover("https://happy-fireplace.name/");
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/x402/pay"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: x402Pay
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.x402.x402Pay({
+                cardId: "sx_a66a6666-...",
+                cardToken: "tok_3b9fe670-...",
+                amount: 0.5,
+                merchant: "weather-api.com",
+                merchantAddress: "0xABC...",
+              });
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/x402/receive"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: x402Receive
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.x402.x402Receive({});
+
+              console.log(result);
+            }
+
+            run();

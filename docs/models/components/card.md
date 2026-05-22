@@ -1,0 +1,41 @@
+# Card
+
+## Example Usage
+
+```typescript
+import { Card } from "@mag3nt/sdk/models/components";
+
+let value: Card = {
+  id: "sx_a66a6666-1234-5678-9abc-def012345678",
+  token: "tok_3b9fe670-abcd-efgh-ijkl-mnopqrstuvwx",
+  purpose: "Research Agent",
+  limitAmount: 50,
+  status: "ACTIVE",
+  mccLocks: "",
+  singleUse: 0,
+  fundingNetwork: "eip155:8453",
+  fundingAsset: "USDC",
+  walletAddress: "0x1234...abcd",
+  balance: 0,
+  remaining: 50,
+};
+```
+
+## Fields
+
+| Field                                                                                         | Type                                                                                          | Required                                                                                      | Description                                                                                   | Example                                                                                       |
+| --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `id`                                                                                          | *string*                                                                                      | :heavy_minus_sign:                                                                            | N/A                                                                                           | sx_a66a6666-1234-5678-9abc-def012345678                                                       |
+| `token`                                                                                       | *string*                                                                                      | :heavy_minus_sign:                                                                            | N/A                                                                                           | tok_3b9fe670-abcd-efgh-ijkl-mnopqrstuvwx                                                      |
+| `purpose`                                                                                     | *string*                                                                                      | :heavy_minus_sign:                                                                            | N/A                                                                                           | Research Agent                                                                                |
+| `limitAmount`                                                                                 | *number*                                                                                      | :heavy_minus_sign:                                                                            | N/A                                                                                           | 50                                                                                            |
+| `status`                                                                                      | [components.CardStatus](../../models/components/card-status.md)                               | :heavy_minus_sign:                                                                            | N/A                                                                                           | ACTIVE                                                                                        |
+| `mccLocks`                                                                                    | *string*                                                                                      | :heavy_minus_sign:                                                                            | N/A                                                                                           |                                                                                               |
+| `singleUse`                                                                                   | [components.SingleUse](../../models/components/single-use.md)                                 | :heavy_minus_sign:                                                                            | N/A                                                                                           | 0                                                                                             |
+| `expiresAt`                                                                                   | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) | :heavy_minus_sign:                                                                            | N/A                                                                                           |                                                                                               |
+| `fundingNetwork`                                                                              | *string*                                                                                      | :heavy_minus_sign:                                                                            | N/A                                                                                           | eip155:8453                                                                                   |
+| `fundingAsset`                                                                                | *string*                                                                                      | :heavy_minus_sign:                                                                            | N/A                                                                                           | USDC                                                                                          |
+| `walletAddress`                                                                               | *string*                                                                                      | :heavy_minus_sign:                                                                            | N/A                                                                                           | 0x1234...abcd                                                                                 |
+| `balance`                                                                                     | *number*                                                                                      | :heavy_minus_sign:                                                                            | N/A                                                                                           | 0                                                                                             |
+| `remaining`                                                                                   | *number*                                                                                      | :heavy_minus_sign:                                                                            | N/A                                                                                           | 50                                                                                            |
+| `createdAt`                                                                                   | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) | :heavy_minus_sign:                                                                            | N/A                                                                                           |                                                                                               |
