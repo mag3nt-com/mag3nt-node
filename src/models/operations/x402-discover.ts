@@ -7,11 +7,14 @@ import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
+import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
 
 export type X402DiscoverRequest = {
   url: string;
 };
+
+export type X402DiscoverAmount = number | string;
 
 /**
  * Discovery result
@@ -19,7 +22,7 @@ export type X402DiscoverRequest = {
 export type X402DiscoverResponse = {
   supportsX402?: boolean | undefined;
   paymentAddress?: string | undefined;
-  amount?: number | undefined;
+  amount?: number | string | undefined;
   asset?: string | undefined;
 };
 
@@ -45,6 +48,22 @@ export function x402DiscoverRequestToJSON(
 }
 
 /** @internal */
+export const X402DiscoverAmount$inboundSchema: z.ZodMiniType<
+  X402DiscoverAmount,
+  unknown
+> = smartUnion([types.number(), types.string()]);
+
+export function x402DiscoverAmountFromJSON(
+  jsonString: string,
+): SafeParseResult<X402DiscoverAmount, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => X402DiscoverAmount$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'X402DiscoverAmount' from JSON`,
+  );
+}
+
+/** @internal */
 export const X402DiscoverResponse$inboundSchema: z.ZodMiniType<
   X402DiscoverResponse,
   unknown
@@ -52,7 +71,7 @@ export const X402DiscoverResponse$inboundSchema: z.ZodMiniType<
   z.object({
     supports_x402: types.optional(types.boolean()),
     payment_address: types.optional(types.string()),
-    amount: types.optional(types.number()),
+    amount: types.optional(smartUnion([types.number(), types.string()])),
     asset: types.optional(types.string()),
   }),
   z.transform((v) => {

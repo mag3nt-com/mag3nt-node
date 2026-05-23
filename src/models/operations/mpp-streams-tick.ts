@@ -7,6 +7,7 @@ import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
+import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
 
 export type MppStreamsTickRequest = {
@@ -15,12 +16,16 @@ export type MppStreamsTickRequest = {
   cardToken: string;
 };
 
+export type MppStreamsTickTotalTicked = number | string;
+
+export type Remaining = number | string;
+
 /**
  * Tick processed
  */
 export type MppStreamsTickResponse = {
-  totalTicked?: number | undefined;
-  remaining?: number | undefined;
+  totalTicked?: number | string | undefined;
+  remaining?: number | string | undefined;
 };
 
 /** @internal */
@@ -58,13 +63,43 @@ export function mppStreamsTickRequestToJSON(
 }
 
 /** @internal */
+export const MppStreamsTickTotalTicked$inboundSchema: z.ZodMiniType<
+  MppStreamsTickTotalTicked,
+  unknown
+> = smartUnion([types.number(), types.string()]);
+
+export function mppStreamsTickTotalTickedFromJSON(
+  jsonString: string,
+): SafeParseResult<MppStreamsTickTotalTicked, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => MppStreamsTickTotalTicked$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MppStreamsTickTotalTicked' from JSON`,
+  );
+}
+
+/** @internal */
+export const Remaining$inboundSchema: z.ZodMiniType<Remaining, unknown> =
+  smartUnion([types.number(), types.string()]);
+
+export function remainingFromJSON(
+  jsonString: string,
+): SafeParseResult<Remaining, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Remaining$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Remaining' from JSON`,
+  );
+}
+
+/** @internal */
 export const MppStreamsTickResponse$inboundSchema: z.ZodMiniType<
   MppStreamsTickResponse,
   unknown
 > = z.pipe(
   z.object({
-    total_ticked: types.optional(types.number()),
-    remaining: types.optional(types.number()),
+    total_ticked: types.optional(smartUnion([types.number(), types.string()])),
+    remaining: types.optional(smartUnion([types.number(), types.string()])),
   }),
   z.transform((v) => {
     return remap$(v, {

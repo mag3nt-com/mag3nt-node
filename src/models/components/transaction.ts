@@ -9,7 +9,10 @@ import * as openEnums from "../../types/enums.js";
 import { OpenEnum } from "../../types/enums.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
+import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
+
+export type TransactionAmount = number | string;
 
 export const Protocol = {
   X402: "x402",
@@ -21,7 +24,7 @@ export type Protocol = OpenEnum<typeof Protocol>;
 export type Transaction = {
   id?: string | undefined;
   cardId?: string | undefined;
-  amount?: number | undefined;
+  amount?: number | string | undefined;
   merchant?: string | undefined;
   protocol?: Protocol | undefined;
   status?: string | undefined;
@@ -29,6 +32,22 @@ export type Transaction = {
   network?: string | undefined;
   createdAt?: Date | undefined;
 };
+
+/** @internal */
+export const TransactionAmount$inboundSchema: z.ZodMiniType<
+  TransactionAmount,
+  unknown
+> = smartUnion([types.number(), types.string()]);
+
+export function transactionAmountFromJSON(
+  jsonString: string,
+): SafeParseResult<TransactionAmount, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => TransactionAmount$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'TransactionAmount' from JSON`,
+  );
+}
 
 /** @internal */
 export const Protocol$inboundSchema: z.ZodMiniType<Protocol, unknown> =
@@ -40,7 +59,7 @@ export const Transaction$inboundSchema: z.ZodMiniType<Transaction, unknown> = z
     z.object({
       id: types.optional(types.string()),
       card_id: types.optional(types.string()),
-      amount: types.optional(types.number()),
+      amount: types.optional(smartUnion([types.number(), types.string()])),
       merchant: types.optional(types.string()),
       protocol: types.optional(Protocol$inboundSchema),
       status: types.optional(types.string()),

@@ -7,11 +7,18 @@ import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
+import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
 
 export type MppStreamsGetRequest = {
   id: string;
 };
+
+export type MppStreamsGetBudget = number | string;
+
+export type MppStreamsGetTickAmount = number | string;
+
+export type MppStreamsGetTotalTicked = number | string;
 
 /**
  * Stream details
@@ -19,9 +26,9 @@ export type MppStreamsGetRequest = {
 export type MppStreamsGetResponse = {
   id?: string | undefined;
   cardId?: string | undefined;
-  budget?: number | undefined;
-  tickAmount?: number | undefined;
-  totalTicked?: number | undefined;
+  budget?: number | string | undefined;
+  tickAmount?: number | string | undefined;
+  totalTicked?: number | string | undefined;
   status?: string | undefined;
 };
 
@@ -47,6 +54,54 @@ export function mppStreamsGetRequestToJSON(
 }
 
 /** @internal */
+export const MppStreamsGetBudget$inboundSchema: z.ZodMiniType<
+  MppStreamsGetBudget,
+  unknown
+> = smartUnion([types.number(), types.string()]);
+
+export function mppStreamsGetBudgetFromJSON(
+  jsonString: string,
+): SafeParseResult<MppStreamsGetBudget, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => MppStreamsGetBudget$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MppStreamsGetBudget' from JSON`,
+  );
+}
+
+/** @internal */
+export const MppStreamsGetTickAmount$inboundSchema: z.ZodMiniType<
+  MppStreamsGetTickAmount,
+  unknown
+> = smartUnion([types.number(), types.string()]);
+
+export function mppStreamsGetTickAmountFromJSON(
+  jsonString: string,
+): SafeParseResult<MppStreamsGetTickAmount, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => MppStreamsGetTickAmount$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MppStreamsGetTickAmount' from JSON`,
+  );
+}
+
+/** @internal */
+export const MppStreamsGetTotalTicked$inboundSchema: z.ZodMiniType<
+  MppStreamsGetTotalTicked,
+  unknown
+> = smartUnion([types.number(), types.string()]);
+
+export function mppStreamsGetTotalTickedFromJSON(
+  jsonString: string,
+): SafeParseResult<MppStreamsGetTotalTicked, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => MppStreamsGetTotalTicked$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MppStreamsGetTotalTicked' from JSON`,
+  );
+}
+
+/** @internal */
 export const MppStreamsGetResponse$inboundSchema: z.ZodMiniType<
   MppStreamsGetResponse,
   unknown
@@ -54,9 +109,9 @@ export const MppStreamsGetResponse$inboundSchema: z.ZodMiniType<
   z.object({
     id: types.optional(types.string()),
     card_id: types.optional(types.string()),
-    budget: types.optional(types.number()),
-    tick_amount: types.optional(types.number()),
-    total_ticked: types.optional(types.number()),
+    budget: types.optional(smartUnion([types.number(), types.string()])),
+    tick_amount: types.optional(smartUnion([types.number(), types.string()])),
+    total_ticked: types.optional(smartUnion([types.number(), types.string()])),
     status: types.optional(types.string()),
   }),
   z.transform((v) => {

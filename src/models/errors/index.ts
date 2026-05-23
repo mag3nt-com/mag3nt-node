@@ -7,5 +7,6 @@ export * from "./error.js";
 export * from "./http-client-errors.js";
 export * from "./mag3nt-default-error.js";
 export * from "./mag3nt-error.js";
+export * from "./pay-links-get-status.js";
 export * from "./response-validation-error.js";
 export * from "./sdk-validation-error.js";

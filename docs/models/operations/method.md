@@ -10,8 +10,8 @@ let value: Method = {};
 
 ## Fields
 
-| Field              | Type               | Required           | Description        |
-| ------------------ | ------------------ | ------------------ | ------------------ |
-| `type`             | *string*           | :heavy_minus_sign: | N/A                |
-| `cardId`           | *string*           | :heavy_minus_sign: | N/A                |
-| `available`        | *number*           | :heavy_minus_sign: | N/A                |
+| Field                  | Type                   | Required               | Description            |
+| ---------------------- | ---------------------- | ---------------------- | ---------------------- |
+| `type`                 | *string*               | :heavy_minus_sign:     | N/A                    |
+| `cardId`               | *string*               | :heavy_minus_sign:     | N/A                    |
+| `available`            | *operations.Available* | :heavy_minus_sign:     | N/A                    |

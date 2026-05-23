@@ -7,17 +7,20 @@ import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
+import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
 
 export type MppStreamsCloseRequest = {
   streamId: string;
 };
 
+export type FinalAmount = number | string;
+
 /**
  * Stream closed
  */
 export type MppStreamsCloseResponse = {
-  finalAmount?: number | undefined;
+  finalAmount?: number | string | undefined;
   status?: string | undefined;
 };
 
@@ -50,12 +53,26 @@ export function mppStreamsCloseRequestToJSON(
 }
 
 /** @internal */
+export const FinalAmount$inboundSchema: z.ZodMiniType<FinalAmount, unknown> =
+  smartUnion([types.number(), types.string()]);
+
+export function finalAmountFromJSON(
+  jsonString: string,
+): SafeParseResult<FinalAmount, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => FinalAmount$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'FinalAmount' from JSON`,
+  );
+}
+
+/** @internal */
 export const MppStreamsCloseResponse$inboundSchema: z.ZodMiniType<
   MppStreamsCloseResponse,
   unknown
 > = z.pipe(
   z.object({
-    final_amount: types.optional(types.number()),
+    final_amount: types.optional(smartUnion([types.number(), types.string()])),
     status: types.optional(types.string()),
   }),
   z.transform((v) => {

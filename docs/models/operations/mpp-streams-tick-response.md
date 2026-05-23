@@ -12,7 +12,7 @@ let value: MppStreamsTickResponse = {};
 
 ## Fields
 
-| Field              | Type               | Required           | Description        |
-| ------------------ | ------------------ | ------------------ | ------------------ |
-| `totalTicked`      | *number*           | :heavy_minus_sign: | N/A                |
-| `remaining`        | *number*           | :heavy_minus_sign: | N/A                |
+| Field                                  | Type                                   | Required                               | Description                            |
+| -------------------------------------- | -------------------------------------- | -------------------------------------- | -------------------------------------- |
+| `totalTicked`                          | *operations.MppStreamsTickTotalTicked* | :heavy_minus_sign:                     | N/A                                    |
+| `remaining`                            | *operations.Remaining*                 | :heavy_minus_sign:                     | N/A                                    |

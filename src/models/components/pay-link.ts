@@ -9,7 +9,10 @@ import * as openEnums from "../../types/enums.js";
 import { OpenEnum } from "../../types/enums.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
+import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
+
+export type PayLinkAmount = string | number;
 
 export const PayLinkStatus = {
   Active: "ACTIVE",
@@ -22,7 +25,7 @@ export type PayLink = {
   id?: string | undefined;
   code?: string | undefined;
   url?: string | undefined;
-  amount?: number | null | undefined;
+  amount?: string | number | null | undefined;
   asset?: string | undefined;
   network?: string | undefined;
   memo?: string | undefined;
@@ -32,6 +35,22 @@ export type PayLink = {
   expiresAt?: Date | null | undefined;
   qrSvg?: string | undefined;
 };
+
+/** @internal */
+export const PayLinkAmount$inboundSchema: z.ZodMiniType<
+  PayLinkAmount,
+  unknown
+> = smartUnion([types.string(), types.number()]);
+
+export function payLinkAmountFromJSON(
+  jsonString: string,
+): SafeParseResult<PayLinkAmount, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => PayLinkAmount$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PayLinkAmount' from JSON`,
+  );
+}
 
 /** @internal */
 export const PayLinkStatus$inboundSchema: z.ZodMiniType<
@@ -45,7 +64,9 @@ export const PayLink$inboundSchema: z.ZodMiniType<PayLink, unknown> = z.pipe(
     id: types.optional(types.string()),
     code: types.optional(types.string()),
     url: types.optional(types.string()),
-    amount: z.optional(z.nullable(types.number())),
+    amount: z.optional(
+      z.nullable(smartUnion([types.string(), types.number()])),
+    ),
     asset: types.optional(types.string()),
     network: types.optional(types.string()),
     memo: types.optional(types.string()),

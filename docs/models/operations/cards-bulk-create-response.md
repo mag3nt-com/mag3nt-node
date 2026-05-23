@@ -33,4 +33,4 @@ let value: CardsBulkCreateResponse = {
 | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
 | `success`                                            | *boolean*                                            | :heavy_minus_sign:                                   | N/A                                                  |
 | `cards`                                              | [components.Card](../../models/components/card.md)[] | :heavy_minus_sign:                                   | N/A                                                  |
-| `totalAllocated`                                     | *number*                                             | :heavy_minus_sign:                                   | N/A                                                  |
+| `totalAllocated`                                     | *operations.TotalAllocated*                          | :heavy_minus_sign:                                   | N/A                                                  |

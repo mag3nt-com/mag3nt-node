@@ -12,9 +12,9 @@ let value: X402DiscoverResponse = {};
 
 ## Fields
 
-| Field              | Type               | Required           | Description        |
-| ------------------ | ------------------ | ------------------ | ------------------ |
-| `supportsX402`     | *boolean*          | :heavy_minus_sign: | N/A                |
-| `paymentAddress`   | *string*           | :heavy_minus_sign: | N/A                |
-| `amount`           | *number*           | :heavy_minus_sign: | N/A                |
-| `asset`            | *string*           | :heavy_minus_sign: | N/A                |
+| Field                           | Type                            | Required                        | Description                     |
+| ------------------------------- | ------------------------------- | ------------------------------- | ------------------------------- |
+| `supportsX402`                  | *boolean*                       | :heavy_minus_sign:              | N/A                             |
+| `paymentAddress`                | *string*                        | :heavy_minus_sign:              | N/A                             |
+| `amount`                        | *operations.X402DiscoverAmount* | :heavy_minus_sign:              | N/A                             |
+| `asset`                         | *string*                        | :heavy_minus_sign:              | N/A                             |

@@ -7,12 +7,15 @@ import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
+import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
+
+export type MppPayAmount = number | string;
 
 export type MppPayRequest = {
   cardId: string;
   cardToken: string;
-  amount: number;
+  amount: number | string;
   merchant?: string | undefined;
   merchantAddress?: string | undefined;
   network?: string | undefined;
@@ -27,10 +30,23 @@ export type MppPayResponse = {
 };
 
 /** @internal */
+export type MppPayAmount$Outbound = number | string;
+
+/** @internal */
+export const MppPayAmount$outboundSchema: z.ZodMiniType<
+  MppPayAmount$Outbound,
+  MppPayAmount
+> = smartUnion([z.number(), z.string()]);
+
+export function mppPayAmountToJSON(mppPayAmount: MppPayAmount): string {
+  return JSON.stringify(MppPayAmount$outboundSchema.parse(mppPayAmount));
+}
+
+/** @internal */
 export type MppPayRequest$Outbound = {
   card_id: string;
   card_token: string;
-  amount: number;
+  amount: number | string;
   merchant?: string | undefined;
   merchant_address?: string | undefined;
   network: string;
@@ -44,7 +60,7 @@ export const MppPayRequest$outboundSchema: z.ZodMiniType<
   z.object({
     cardId: z.string(),
     cardToken: z.string(),
-    amount: z.number(),
+    amount: smartUnion([z.number(), z.string()]),
     merchant: z.optional(z.string()),
     merchantAddress: z.optional(z.string()),
     network: z._default(z.string(), "eip155:8453"),

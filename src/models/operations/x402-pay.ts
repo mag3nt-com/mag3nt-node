@@ -9,8 +9,14 @@ import * as openEnums from "../../types/enums.js";
 import { OpenEnum } from "../../types/enums.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
+import { smartUnion } from "../../types/smart-union.js";
 import * as components from "../components/index.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
+
+/**
+ * Payment amount in USDC
+ */
+export type X402PayAmountRequest = number | string;
 
 export type X402PayRequest = {
   /**
@@ -24,7 +30,7 @@ export type X402PayRequest = {
   /**
    * Payment amount in USDC
    */
-  amount: number;
+  amount: number | string;
   /**
    * Merchant identifier
    */
@@ -43,6 +49,8 @@ export type X402PayRequest = {
   resourceUrl?: string | undefined;
   network?: string | undefined;
 };
+
+export type X402PayAmountResponse = number | string;
 
 /**
  * 'sandbox' for testnet networks (e.g. eip155:84532), 'production' for mainnet. Sandbox transactions deduct balance but are never settled on-chain.
@@ -63,7 +71,7 @@ export type X402PayResponse = {
   success?: boolean | undefined;
   transactionId?: string | undefined;
   cardId?: string | undefined;
-  amount?: number | undefined;
+  amount?: number | string | undefined;
   network?: string | undefined;
   /**
    * 'sandbox' for testnet networks (e.g. eip155:84532), 'production' for mainnet. Sandbox transactions deduct balance but are never settled on-chain.
@@ -76,10 +84,27 @@ export type X402PayResponse = {
 };
 
 /** @internal */
+export type X402PayAmountRequest$Outbound = number | string;
+
+/** @internal */
+export const X402PayAmountRequest$outboundSchema: z.ZodMiniType<
+  X402PayAmountRequest$Outbound,
+  X402PayAmountRequest
+> = smartUnion([z.number(), z.string()]);
+
+export function x402PayAmountRequestToJSON(
+  x402PayAmountRequest: X402PayAmountRequest,
+): string {
+  return JSON.stringify(
+    X402PayAmountRequest$outboundSchema.parse(x402PayAmountRequest),
+  );
+}
+
+/** @internal */
 export type X402PayRequest$Outbound = {
   card_id: string;
   card_token: string;
-  amount: number;
+  amount: number | string;
   merchant?: string | undefined;
   merchant_address?: string | undefined;
   mcc?: string | undefined;
@@ -95,7 +120,7 @@ export const X402PayRequest$outboundSchema: z.ZodMiniType<
   z.object({
     cardId: z.string(),
     cardToken: z.string(),
-    amount: z.number(),
+    amount: smartUnion([z.number(), z.string()]),
     merchant: z.optional(z.string()),
     merchantAddress: z.optional(z.string()),
     mcc: z.optional(z.string()),
@@ -117,6 +142,22 @@ export function x402PayRequestToJSON(x402PayRequest: X402PayRequest): string {
 }
 
 /** @internal */
+export const X402PayAmountResponse$inboundSchema: z.ZodMiniType<
+  X402PayAmountResponse,
+  unknown
+> = smartUnion([types.number(), types.string()]);
+
+export function x402PayAmountResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<X402PayAmountResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => X402PayAmountResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'X402PayAmountResponse' from JSON`,
+  );
+}
+
+/** @internal */
 export const Environment$inboundSchema: z.ZodMiniType<Environment, unknown> =
   openEnums.inboundSchema(Environment);
 
@@ -129,7 +170,7 @@ export const X402PayResponse$inboundSchema: z.ZodMiniType<
     success: types.optional(types.boolean()),
     transaction_id: types.optional(types.string()),
     card_id: types.optional(types.string()),
-    amount: types.optional(types.number()),
+    amount: types.optional(smartUnion([types.number(), types.string()])),
     network: types.optional(types.string()),
     environment: types.optional(Environment$inboundSchema),
     resource_url: z.optional(z.nullable(types.string())),

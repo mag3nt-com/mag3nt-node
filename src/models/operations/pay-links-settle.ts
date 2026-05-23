@@ -10,10 +10,12 @@ import * as types from "../../types/primitives.js";
 import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
 
+export type PayLinksSettleAmount = number | string;
+
 export type RequestBody2 = {
   txHash?: string | undefined;
   fromAddress?: string | undefined;
-  amount?: number | undefined;
+  amount?: number | string | undefined;
 };
 
 export type RequestBody1 = {
@@ -38,10 +40,27 @@ export type PayLinksSettleResponse = {
 };
 
 /** @internal */
+export type PayLinksSettleAmount$Outbound = number | string;
+
+/** @internal */
+export const PayLinksSettleAmount$outboundSchema: z.ZodMiniType<
+  PayLinksSettleAmount$Outbound,
+  PayLinksSettleAmount
+> = smartUnion([z.number(), z.string()]);
+
+export function payLinksSettleAmountToJSON(
+  payLinksSettleAmount: PayLinksSettleAmount,
+): string {
+  return JSON.stringify(
+    PayLinksSettleAmount$outboundSchema.parse(payLinksSettleAmount),
+  );
+}
+
+/** @internal */
 export type RequestBody2$Outbound = {
   tx_hash?: string | undefined;
   from_address?: string | undefined;
-  amount?: number | undefined;
+  amount?: number | string | undefined;
 };
 
 /** @internal */
@@ -52,7 +71,7 @@ export const RequestBody2$outboundSchema: z.ZodMiniType<
   z.object({
     txHash: z.optional(z.string()),
     fromAddress: z.optional(z.string()),
-    amount: z.optional(z.number()),
+    amount: z.optional(smartUnion([z.number(), z.string()])),
   }),
   z.transform((v) => {
     return remap$(v, {

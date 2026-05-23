@@ -80,7 +80,7 @@ run();
 
 ### Response
 
-**Promise\<[operations.PayLinksCreateResponse](../../models/operations/pay-links-create-response.md)\>**
+**Promise\<[components.PayLink](../../models/components/pay-link.md)\>**
 
 ### Errors
 
@@ -353,6 +353,8 @@ run();
 
 | Error Type                | Status Code               | Content Type              |
 | ------------------------- | ------------------------- | ------------------------- |
+| errors.ErrorT             | 404                       | application/json          |
+| errors.GoneError          | 410                       | application/json          |
 | errors.Mag3ntDefaultError | 4XX, 5XX                  | \*/\*                     |
 
 ## payLinksResolve

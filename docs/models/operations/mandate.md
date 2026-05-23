@@ -10,9 +10,9 @@ let value: Mandate = {};
 
 ## Fields
 
-| Field              | Type               | Required           | Description        |
-| ------------------ | ------------------ | ------------------ | ------------------ |
-| `mandateId`        | *string*           | :heavy_minus_sign: | N/A                |
-| `merchant`         | *string*           | :heavy_minus_sign: | N/A                |
-| `amount`           | *number*           | :heavy_minus_sign: | N/A                |
-| `status`           | *string*           | :heavy_minus_sign: | N/A                |
+| Field                              | Type                               | Required                           | Description                        |
+| ---------------------------------- | ---------------------------------- | ---------------------------------- | ---------------------------------- |
+| `mandateId`                        | *string*                           | :heavy_minus_sign:                 | N/A                                |
+| `merchant`                         | *string*                           | :heavy_minus_sign:                 | N/A                                |
+| `amount`                           | *operations.Ap2ListMandatesAmount* | :heavy_minus_sign:                 | N/A                                |
+| `status`                           | *string*                           | :heavy_minus_sign:                 | N/A                                |

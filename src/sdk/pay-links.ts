@@ -22,7 +22,7 @@ export class PayLinks extends ClientSDK {
   async payLinksCreate(
     request: operations.PayLinksCreateRequest,
     options?: RequestOptions,
-  ): Promise<operations.PayLinksCreateResponse> {
+  ): Promise<components.PayLink> {
     return unwrapAsync(payLinksPayLinksCreate(
       this,
       request,

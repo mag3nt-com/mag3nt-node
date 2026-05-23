@@ -7,13 +7,13 @@ import { Card } from "@mag3nt/sdk/models/operations";
 
 let value: Card = {
   purpose: "<value>",
-  limitAmount: 4031.16,
+  limitAmount: 3064.58,
 };
 ```
 
 ## Fields
 
-| Field              | Type               | Required           | Description        |
-| ------------------ | ------------------ | ------------------ | ------------------ |
-| `purpose`          | *string*           | :heavy_check_mark: | N/A                |
-| `limitAmount`      | *number*           | :heavy_check_mark: | N/A                |
+| Field                                   | Type                                    | Required                                | Description                             |
+| --------------------------------------- | --------------------------------------- | --------------------------------------- | --------------------------------------- |
+| `purpose`                               | *string*                                | :heavy_check_mark:                      | N/A                                     |
+| `limitAmount`                           | *operations.CardsBulkCreateLimitAmount* | :heavy_check_mark:                      | N/A                                     |

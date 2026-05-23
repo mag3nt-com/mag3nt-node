@@ -3,7 +3,6 @@
  */
 
 import * as z from "zod/v4-mini";
-import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
@@ -14,23 +13,16 @@ import { SDKValidationError } from "../errors/sdk-validation-error.js";
  * Pay links list
  */
 export type PayLinksListResponse = {
-  payLinks?: Array<components.PayLink> | undefined;
+  links?: Array<components.PayLink> | undefined;
 };
 
 /** @internal */
 export const PayLinksListResponse$inboundSchema: z.ZodMiniType<
   PayLinksListResponse,
   unknown
-> = z.pipe(
-  z.object({
-    pay_links: types.optional(z.array(components.PayLink$inboundSchema)),
-  }),
-  z.transform((v) => {
-    return remap$(v, {
-      "pay_links": "payLinks",
-    });
-  }),
-);
+> = z.object({
+  links: types.optional(z.array(components.PayLink$inboundSchema)),
+});
 
 export function payLinksListResponseFromJSON(
   jsonString: string,
