@@ -7,12 +7,15 @@ import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
+import { smartUnion } from "../../types/smart-union.js";
 import * as components from "../components/index.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
 
+export type CardsBulkCreateLimitAmount = number | string;
+
 export type Card = {
   purpose: string;
-  limitAmount: number;
+  limitAmount: number | string;
 };
 
 export type CardsBulkCreateRequestBody = {
@@ -29,26 +32,45 @@ export type CardsBulkCreateRequest = {
   body: CardsBulkCreateRequestBody;
 };
 
+export type TotalAllocated = number | string;
+
 /**
  * Cards created
  */
 export type CardsBulkCreateResponse = {
   success?: boolean | undefined;
   cards?: Array<components.Card> | undefined;
-  totalAllocated?: number | undefined;
+  totalAllocated?: number | string | undefined;
 };
+
+/** @internal */
+export type CardsBulkCreateLimitAmount$Outbound = number | string;
+
+/** @internal */
+export const CardsBulkCreateLimitAmount$outboundSchema: z.ZodMiniType<
+  CardsBulkCreateLimitAmount$Outbound,
+  CardsBulkCreateLimitAmount
+> = smartUnion([z.number(), z.string()]);
+
+export function cardsBulkCreateLimitAmountToJSON(
+  cardsBulkCreateLimitAmount: CardsBulkCreateLimitAmount,
+): string {
+  return JSON.stringify(
+    CardsBulkCreateLimitAmount$outboundSchema.parse(cardsBulkCreateLimitAmount),
+  );
+}
 
 /** @internal */
 export type Card$Outbound = {
   purpose: string;
-  limit_amount: number;
+  limit_amount: number | string;
 };
 
 /** @internal */
 export const Card$outboundSchema: z.ZodMiniType<Card$Outbound, Card> = z.pipe(
   z.object({
     purpose: z.string(),
-    limitAmount: z.number(),
+    limitAmount: smartUnion([z.number(), z.string()]),
   }),
   z.transform((v) => {
     return remap$(v, {
@@ -117,6 +139,22 @@ export function cardsBulkCreateRequestToJSON(
 }
 
 /** @internal */
+export const TotalAllocated$inboundSchema: z.ZodMiniType<
+  TotalAllocated,
+  unknown
+> = smartUnion([types.number(), types.string()]);
+
+export function totalAllocatedFromJSON(
+  jsonString: string,
+): SafeParseResult<TotalAllocated, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => TotalAllocated$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'TotalAllocated' from JSON`,
+  );
+}
+
+/** @internal */
 export const CardsBulkCreateResponse$inboundSchema: z.ZodMiniType<
   CardsBulkCreateResponse,
   unknown
@@ -124,7 +162,9 @@ export const CardsBulkCreateResponse$inboundSchema: z.ZodMiniType<
   z.object({
     success: types.optional(types.boolean()),
     cards: types.optional(z.array(components.Card$inboundSchema)),
-    total_allocated: types.optional(types.number()),
+    total_allocated: types.optional(
+      smartUnion([types.number(), types.string()]),
+    ),
   }),
   z.transform((v) => {
     return remap$(v, {

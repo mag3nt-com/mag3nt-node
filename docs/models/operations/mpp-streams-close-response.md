@@ -12,7 +12,7 @@ let value: MppStreamsCloseResponse = {};
 
 ## Fields
 
-| Field              | Type               | Required           | Description        |
-| ------------------ | ------------------ | ------------------ | ------------------ |
-| `finalAmount`      | *number*           | :heavy_minus_sign: | N/A                |
-| `status`           | *string*           | :heavy_minus_sign: | N/A                |
+| Field                    | Type                     | Required                 | Description              |
+| ------------------------ | ------------------------ | ------------------------ | ------------------------ |
+| `finalAmount`            | *operations.FinalAmount* | :heavy_minus_sign:       | N/A                      |
+| `status`                 | *string*                 | :heavy_minus_sign:       | N/A                      |

@@ -38,7 +38,7 @@ actions:
               const result = await mag3nt.ap2.ap2Execute({
                 cardId: "<id>",
                 cardToken: "<value>",
-                amount: 7776.54,
+                amount: "802.33",
               });
 
               console.log(result);
@@ -61,7 +61,7 @@ actions:
               const result = await mag3nt.ap2.ap2CreateMandate({
                 cardId: "<id>",
                 cardToken: "<value>",
-                amount: 173.14,
+                amount: 1529.88,
                 merchant: "<value>",
               });
 
@@ -430,7 +430,7 @@ actions:
               const result = await mag3nt.mpp.mppPay({
                 cardId: "<id>",
                 cardToken: "<value>",
-                amount: 7359.99,
+                amount: "345.29",
               });
 
               console.log(result);
@@ -516,8 +516,8 @@ actions:
               const result = await mag3nt.mpp.mppStreamsOpen({
                 cardId: "<id>",
                 cardToken: "<value>",
-                budget: 8538.9,
-                tickAmount: 1381.56,
+                budget: "<value>",
+                tickAmount: 1246.22,
               });
 
               console.log(result);

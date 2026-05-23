@@ -7,16 +7,19 @@ import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
+import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
 
 export type Ap2ListMandatesRequest = {
   cardId: string;
 };
 
+export type Ap2ListMandatesAmount = number | string;
+
 export type Mandate = {
   mandateId?: string | undefined;
   merchant?: string | undefined;
-  amount?: number | undefined;
+  amount?: number | string | undefined;
   status?: string | undefined;
 };
 
@@ -56,11 +59,27 @@ export function ap2ListMandatesRequestToJSON(
 }
 
 /** @internal */
+export const Ap2ListMandatesAmount$inboundSchema: z.ZodMiniType<
+  Ap2ListMandatesAmount,
+  unknown
+> = smartUnion([types.number(), types.string()]);
+
+export function ap2ListMandatesAmountFromJSON(
+  jsonString: string,
+): SafeParseResult<Ap2ListMandatesAmount, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Ap2ListMandatesAmount$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Ap2ListMandatesAmount' from JSON`,
+  );
+}
+
+/** @internal */
 export const Mandate$inboundSchema: z.ZodMiniType<Mandate, unknown> = z.pipe(
   z.object({
     mandate_id: types.optional(types.string()),
     merchant: types.optional(types.string()),
-    amount: types.optional(types.number()),
+    amount: types.optional(smartUnion([types.number(), types.string()])),
     status: types.optional(types.string()),
   }),
   z.transform((v) => {

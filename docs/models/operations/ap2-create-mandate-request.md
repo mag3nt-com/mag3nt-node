@@ -8,7 +8,7 @@ import { Ap2CreateMandateRequest } from "@mag3nt/sdk/models/operations";
 let value: Ap2CreateMandateRequest = {
   cardId: "<id>",
   cardToken: "<value>",
-  amount: 5458.54,
+  amount: "852.40",
   merchant: "<value>",
 };
 ```
@@ -19,7 +19,7 @@ let value: Ap2CreateMandateRequest = {
 | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | `cardId`                                                                                      | *string*                                                                                      | :heavy_check_mark:                                                                            | N/A                                                                                           |
 | `cardToken`                                                                                   | *string*                                                                                      | :heavy_check_mark:                                                                            | N/A                                                                                           |
-| `amount`                                                                                      | *number*                                                                                      | :heavy_check_mark:                                                                            | N/A                                                                                           |
+| `amount`                                                                                      | *operations.Ap2CreateMandateAmount*                                                           | :heavy_check_mark:                                                                            | N/A                                                                                           |
 | `merchant`                                                                                    | *string*                                                                                      | :heavy_check_mark:                                                                            | N/A                                                                                           |
-| `maxAmount`                                                                                   | *number*                                                                                      | :heavy_minus_sign:                                                                            | N/A                                                                                           |
+| `maxAmount`                                                                                   | *operations.MaxAmount*                                                                        | :heavy_minus_sign:                                                                            | N/A                                                                                           |
 | `expiresAt`                                                                                   | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) | :heavy_minus_sign:                                                                            | N/A                                                                                           |

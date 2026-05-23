@@ -382,7 +382,7 @@ run();
 **Primary error:**
 * [`Mag3ntError`](./src/models/errors/mag3nt-error.ts): The base class for HTTP error responses.
 
-<details><summary>Less common errors (8)</summary>
+<details><summary>Less common errors (9)</summary>
 
 <br />
 
@@ -395,8 +395,9 @@ run();
 
 
 **Inherit from [`Mag3ntError`](./src/models/errors/mag3nt-error.ts)**:
-* [`ErrorT`](./src/models/errors/error-t.ts): Applicable to 3 of 41 methods.*
+* [`ErrorT`](./src/models/errors/error-t.ts): Applicable to 4 of 41 methods.*
 * [`BalanceError`](./src/models/errors/balance-error.ts): Insufficient balance. Status code `403`. Applicable to 2 of 41 methods.*
+* [`GoneError`](./src/models/errors/gone-error.ts): Pay link has been used. Status code `410`. Applicable to 1 of 41 methods.*
 * [`ResponseValidationError`](./src/models/errors/response-validation-error.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>

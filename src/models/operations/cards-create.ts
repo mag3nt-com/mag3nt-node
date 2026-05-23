@@ -7,8 +7,14 @@ import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
+import { smartUnion } from "../../types/smart-union.js";
 import * as components from "../components/index.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
+
+/**
+ * Maximum spend in USDC
+ */
+export type CardsCreateLimitAmount = number | string;
 
 export type CardsCreateRequest = {
   /**
@@ -18,7 +24,7 @@ export type CardsCreateRequest = {
   /**
    * Maximum spend in USDC
    */
-  limitAmount: number;
+  limitAmount: number | string;
   network?: string | undefined;
   asset?: string | undefined;
   /**
@@ -45,9 +51,26 @@ export type CardsCreateResponse = {
 };
 
 /** @internal */
+export type CardsCreateLimitAmount$Outbound = number | string;
+
+/** @internal */
+export const CardsCreateLimitAmount$outboundSchema: z.ZodMiniType<
+  CardsCreateLimitAmount$Outbound,
+  CardsCreateLimitAmount
+> = smartUnion([z.number(), z.string()]);
+
+export function cardsCreateLimitAmountToJSON(
+  cardsCreateLimitAmount: CardsCreateLimitAmount,
+): string {
+  return JSON.stringify(
+    CardsCreateLimitAmount$outboundSchema.parse(cardsCreateLimitAmount),
+  );
+}
+
+/** @internal */
 export type CardsCreateRequest$Outbound = {
   purpose: string;
-  limit_amount: number;
+  limit_amount: number | string;
   network: string;
   asset: string;
   tx_hash?: string | undefined;
@@ -63,7 +86,7 @@ export const CardsCreateRequest$outboundSchema: z.ZodMiniType<
 > = z.pipe(
   z.object({
     purpose: z.string(),
-    limitAmount: z.number(),
+    limitAmount: smartUnion([z.number(), z.string()]),
     network: z._default(z.string(), "eip155:8453"),
     asset: z._default(z.string(), "USDC"),
     txHash: z.optional(z.string()),

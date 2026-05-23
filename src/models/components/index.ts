@@ -3,6 +3,7 @@
  */
 
 export * from "./api-key.js";
+export * from "./balance-error.js";
 export * from "./balance.js";
 export * from "./card.js";
 export * from "./pay-link.js";

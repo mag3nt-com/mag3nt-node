@@ -4,20 +4,21 @@
 
 import * as z from "zod/v4-mini";
 import * as types from "../../types/primitives.js";
+import * as components from "../components/index.js";
 import { Mag3ntError } from "./mag3nt-error.js";
 
 export type BalanceErrorData = {
   error: string;
-  available: number;
-  requested: number;
+  available: components.BalanceErrorAvailable;
+  requested: components.Requested;
   network?: string | undefined;
   asset?: string | undefined;
 };
 
 export class BalanceError extends Mag3ntError {
   error: string;
-  available: number;
-  requested: number;
+  available: components.BalanceErrorAvailable;
+  requested: components.Requested;
   network?: string | undefined;
   asset?: string | undefined;
 
@@ -48,8 +49,8 @@ export const BalanceError$inboundSchema: z.ZodMiniType<BalanceError, unknown> =
   z.pipe(
     z.object({
       error: types.string(),
-      available: types.number(),
-      requested: types.number(),
+      available: z.lazy(() => components.BalanceErrorAvailable$inboundSchema),
+      requested: z.lazy(() => components.Requested$inboundSchema),
       network: types.optional(types.string()),
       asset: types.optional(types.string()),
       request$: z.custom<Request>(x => x instanceof Request),

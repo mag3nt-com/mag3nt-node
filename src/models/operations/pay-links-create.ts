@@ -4,12 +4,13 @@
 
 import * as z from "zod/v4-mini";
 import { remap as remap$ } from "../../lib/primitives.js";
-import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
-import { Result as SafeParseResult } from "../../types/fp.js";
-import * as types from "../../types/primitives.js";
-import * as components from "../components/index.js";
-import { SDKValidationError } from "../errors/sdk-validation-error.js";
+import { smartUnion } from "../../types/smart-union.js";
+
+/**
+ * Fixed amount (null for open-amount)
+ */
+export type PayLinksCreateAmount = string | number;
 
 /**
  * SINGLE for one-time, RECURRING for multi-use
@@ -28,7 +29,7 @@ export type PayLinksCreateRequest = {
   /**
    * Fixed amount (null for open-amount)
    */
-  amount?: number | null | undefined;
+  amount?: string | number | null | undefined;
   memo?: string | undefined;
   /**
    * SINGLE for one-time, RECURRING for multi-use
@@ -41,13 +42,22 @@ export type PayLinksCreateRequest = {
   expiresIn?: number | undefined;
 };
 
-/**
- * Pay link created
- */
-export type PayLinksCreateResponse = {
-  success?: boolean | undefined;
-  payLink?: components.PayLink | undefined;
-};
+/** @internal */
+export type PayLinksCreateAmount$Outbound = string | number;
+
+/** @internal */
+export const PayLinksCreateAmount$outboundSchema: z.ZodMiniType<
+  PayLinksCreateAmount$Outbound,
+  PayLinksCreateAmount
+> = smartUnion([z.string(), z.number()]);
+
+export function payLinksCreateAmountToJSON(
+  payLinksCreateAmount: PayLinksCreateAmount,
+): string {
+  return JSON.stringify(
+    PayLinksCreateAmount$outboundSchema.parse(payLinksCreateAmount),
+  );
+}
 
 /** @internal */
 export const PayLinksCreateType$outboundSchema: z.ZodMiniEnum<
@@ -57,7 +67,7 @@ export const PayLinksCreateType$outboundSchema: z.ZodMiniEnum<
 /** @internal */
 export type PayLinksCreateRequest$Outbound = {
   card_id: string;
-  amount?: number | null | undefined;
+  amount?: string | number | null | undefined;
   memo?: string | undefined;
   type: string;
   max_uses: number;
@@ -71,7 +81,7 @@ export const PayLinksCreateRequest$outboundSchema: z.ZodMiniType<
 > = z.pipe(
   z.object({
     cardId: z.string(),
-    amount: z.optional(z.nullable(z.number())),
+    amount: z.optional(z.nullable(smartUnion([z.string(), z.number()]))),
     memo: z.optional(z.string()),
     type: z._default(PayLinksCreateType$outboundSchema, "SINGLE"),
     maxUses: z._default(z.int(), 1),
@@ -91,31 +101,5 @@ export function payLinksCreateRequestToJSON(
 ): string {
   return JSON.stringify(
     PayLinksCreateRequest$outboundSchema.parse(payLinksCreateRequest),
-  );
-}
-
-/** @internal */
-export const PayLinksCreateResponse$inboundSchema: z.ZodMiniType<
-  PayLinksCreateResponse,
-  unknown
-> = z.pipe(
-  z.object({
-    success: types.optional(types.boolean()),
-    pay_link: types.optional(components.PayLink$inboundSchema),
-  }),
-  z.transform((v) => {
-    return remap$(v, {
-      "pay_link": "payLink",
-    });
-  }),
-);
-
-export function payLinksCreateResponseFromJSON(
-  jsonString: string,
-): SafeParseResult<PayLinksCreateResponse, SDKValidationError> {
-  return safeParse(
-    jsonString,
-    (x) => PayLinksCreateResponse$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'PayLinksCreateResponse' from JSON`,
   );
 }

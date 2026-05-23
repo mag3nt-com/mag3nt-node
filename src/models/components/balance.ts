@@ -7,26 +7,117 @@ import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
+import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
 
+export type TotalFunded = number | string;
+
+export type TotalAllocated = number | string;
+
+export type TotalSpent = number | string;
+
+export type TotalWithdrawn = number | string;
+
+export type BalanceAvailable = number | string;
+
 export type Balance = {
-  totalFunded?: number | undefined;
-  totalAllocated?: number | undefined;
-  totalSpent?: number | undefined;
-  totalWithdrawn?: number | undefined;
-  available?: number | undefined;
+  totalFunded?: number | string | undefined;
+  totalAllocated?: number | string | undefined;
+  totalSpent?: number | string | undefined;
+  totalWithdrawn?: number | string | undefined;
+  available?: number | string | undefined;
   network?: string | undefined;
   asset?: string | undefined;
 };
 
 /** @internal */
+export const TotalFunded$inboundSchema: z.ZodMiniType<TotalFunded, unknown> =
+  smartUnion([types.number(), types.string()]);
+
+export function totalFundedFromJSON(
+  jsonString: string,
+): SafeParseResult<TotalFunded, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => TotalFunded$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'TotalFunded' from JSON`,
+  );
+}
+
+/** @internal */
+export const TotalAllocated$inboundSchema: z.ZodMiniType<
+  TotalAllocated,
+  unknown
+> = smartUnion([types.number(), types.string()]);
+
+export function totalAllocatedFromJSON(
+  jsonString: string,
+): SafeParseResult<TotalAllocated, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => TotalAllocated$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'TotalAllocated' from JSON`,
+  );
+}
+
+/** @internal */
+export const TotalSpent$inboundSchema: z.ZodMiniType<TotalSpent, unknown> =
+  smartUnion([types.number(), types.string()]);
+
+export function totalSpentFromJSON(
+  jsonString: string,
+): SafeParseResult<TotalSpent, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => TotalSpent$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'TotalSpent' from JSON`,
+  );
+}
+
+/** @internal */
+export const TotalWithdrawn$inboundSchema: z.ZodMiniType<
+  TotalWithdrawn,
+  unknown
+> = smartUnion([types.number(), types.string()]);
+
+export function totalWithdrawnFromJSON(
+  jsonString: string,
+): SafeParseResult<TotalWithdrawn, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => TotalWithdrawn$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'TotalWithdrawn' from JSON`,
+  );
+}
+
+/** @internal */
+export const BalanceAvailable$inboundSchema: z.ZodMiniType<
+  BalanceAvailable,
+  unknown
+> = smartUnion([types.number(), types.string()]);
+
+export function balanceAvailableFromJSON(
+  jsonString: string,
+): SafeParseResult<BalanceAvailable, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => BalanceAvailable$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'BalanceAvailable' from JSON`,
+  );
+}
+
+/** @internal */
 export const Balance$inboundSchema: z.ZodMiniType<Balance, unknown> = z.pipe(
   z.object({
-    total_funded: types.optional(types.number()),
-    total_allocated: types.optional(types.number()),
-    total_spent: types.optional(types.number()),
-    total_withdrawn: types.optional(types.number()),
-    available: types.optional(types.number()),
+    total_funded: types.optional(smartUnion([types.number(), types.string()])),
+    total_allocated: types.optional(
+      smartUnion([types.number(), types.string()]),
+    ),
+    total_spent: types.optional(smartUnion([types.number(), types.string()])),
+    total_withdrawn: types.optional(
+      smartUnion([types.number(), types.string()]),
+    ),
+    available: types.optional(smartUnion([types.number(), types.string()])),
     network: types.optional(types.string()),
     asset: types.optional(types.string()),
   }),

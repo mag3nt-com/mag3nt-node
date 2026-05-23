@@ -33,7 +33,7 @@ async function run() {
   const result = await mag3nt.mpp.mppPay({
     cardId: "<id>",
     cardToken: "<value>",
-    amount: 7359.99,
+    amount: "345.29",
   });
 
   console.log(result);
@@ -60,7 +60,7 @@ async function run() {
   const res = await mppMPPPay(mag3nt, {
     cardId: "<id>",
     cardToken: "<value>",
-    amount: 7359.99,
+    amount: "345.29",
   });
   if (res.ok) {
     const { value: result } = res;
@@ -325,8 +325,8 @@ async function run() {
   const result = await mag3nt.mpp.mppStreamsOpen({
     cardId: "<id>",
     cardToken: "<value>",
-    budget: 8538.9,
-    tickAmount: 1381.56,
+    budget: "<value>",
+    tickAmount: 1246.22,
   });
 
   console.log(result);
@@ -353,8 +353,8 @@ async function run() {
   const res = await mppMPPStreamsOpen(mag3nt, {
     cardId: "<id>",
     cardToken: "<value>",
-    budget: 8538.9,
-    tickAmount: 1381.56,
+    budget: "<value>",
+    tickAmount: 1246.22,
   });
   if (res.ok) {
     const { value: result } = res;

@@ -7,12 +7,15 @@ import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
+import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
+
+export type Ap2ExecuteAmount = number | string;
 
 export type Ap2ExecuteRequest = {
   cardId: string;
   cardToken: string;
-  amount: number;
+  amount: number | string;
   mandateId?: string | undefined;
 };
 
@@ -25,10 +28,27 @@ export type Ap2ExecuteResponse = {
 };
 
 /** @internal */
+export type Ap2ExecuteAmount$Outbound = number | string;
+
+/** @internal */
+export const Ap2ExecuteAmount$outboundSchema: z.ZodMiniType<
+  Ap2ExecuteAmount$Outbound,
+  Ap2ExecuteAmount
+> = smartUnion([z.number(), z.string()]);
+
+export function ap2ExecuteAmountToJSON(
+  ap2ExecuteAmount: Ap2ExecuteAmount,
+): string {
+  return JSON.stringify(
+    Ap2ExecuteAmount$outboundSchema.parse(ap2ExecuteAmount),
+  );
+}
+
+/** @internal */
 export type Ap2ExecuteRequest$Outbound = {
   card_id: string;
   card_token: string;
-  amount: number;
+  amount: number | string;
   mandate_id?: string | undefined;
 };
 
@@ -40,7 +60,7 @@ export const Ap2ExecuteRequest$outboundSchema: z.ZodMiniType<
   z.object({
     cardId: z.string(),
     cardToken: z.string(),
-    amount: z.number(),
+    amount: smartUnion([z.number(), z.string()]),
     mandateId: z.optional(z.string()),
   }),
   z.transform((v) => {

@@ -166,7 +166,7 @@ async function run() {
   const result = await mag3nt.ap2.ap2CreateMandate({
     cardId: "<id>",
     cardToken: "<value>",
-    amount: 173.14,
+    amount: 1529.88,
     merchant: "<value>",
   });
 
@@ -194,7 +194,7 @@ async function run() {
   const res = await ap2Ap2CreateMandate(mag3nt, {
     cardId: "<id>",
     cardToken: "<value>",
-    amount: 173.14,
+    amount: 1529.88,
     merchant: "<value>",
   });
   if (res.ok) {
@@ -245,7 +245,7 @@ async function run() {
   const result = await mag3nt.ap2.ap2Execute({
     cardId: "<id>",
     cardToken: "<value>",
-    amount: 7776.54,
+    amount: "802.33",
   });
 
   console.log(result);
@@ -272,7 +272,7 @@ async function run() {
   const res = await ap2Ap2Execute(mag3nt, {
     cardId: "<id>",
     cardToken: "<value>",
-    amount: 7776.54,
+    amount: "802.33",
   });
   if (res.ok) {
     const { value: result } = res;

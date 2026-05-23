@@ -7,32 +7,73 @@ import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
+import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
+
+export type Ap2CreateMandateAmount = number | string;
+
+export type MaxAmount = number | string;
 
 export type Ap2CreateMandateRequest = {
   cardId: string;
   cardToken: string;
-  amount: number;
+  amount: number | string;
   merchant: string;
-  maxAmount?: number | undefined;
+  maxAmount?: number | string | undefined;
   expiresAt?: Date | undefined;
 };
+
+export type Contents = {};
 
 /**
  * Mandate created
  */
 export type Ap2CreateMandateResponse = {
   mandateId?: string | undefined;
-  status?: string | undefined;
+  type?: string | undefined;
+  contents?: Contents | undefined;
+  merchantSignature?: string | undefined;
+  ttl?: string | undefined;
+  protocol?: string | undefined;
 };
+
+/** @internal */
+export type Ap2CreateMandateAmount$Outbound = number | string;
+
+/** @internal */
+export const Ap2CreateMandateAmount$outboundSchema: z.ZodMiniType<
+  Ap2CreateMandateAmount$Outbound,
+  Ap2CreateMandateAmount
+> = smartUnion([z.number(), z.string()]);
+
+export function ap2CreateMandateAmountToJSON(
+  ap2CreateMandateAmount: Ap2CreateMandateAmount,
+): string {
+  return JSON.stringify(
+    Ap2CreateMandateAmount$outboundSchema.parse(ap2CreateMandateAmount),
+  );
+}
+
+/** @internal */
+export type MaxAmount$Outbound = number | string;
+
+/** @internal */
+export const MaxAmount$outboundSchema: z.ZodMiniType<
+  MaxAmount$Outbound,
+  MaxAmount
+> = smartUnion([z.number(), z.string()]);
+
+export function maxAmountToJSON(maxAmount: MaxAmount): string {
+  return JSON.stringify(MaxAmount$outboundSchema.parse(maxAmount));
+}
 
 /** @internal */
 export type Ap2CreateMandateRequest$Outbound = {
   card_id: string;
   card_token: string;
-  amount: number;
+  amount: number | string;
   merchant: string;
-  max_amount?: number | undefined;
+  max_amount?: number | string | undefined;
   expires_at?: string | undefined;
 };
 
@@ -44,9 +85,9 @@ export const Ap2CreateMandateRequest$outboundSchema: z.ZodMiniType<
   z.object({
     cardId: z.string(),
     cardToken: z.string(),
-    amount: z.number(),
+    amount: smartUnion([z.number(), z.string()]),
     merchant: z.string(),
-    maxAmount: z.optional(z.number()),
+    maxAmount: z.optional(smartUnion([z.number(), z.string()])),
     expiresAt: z.optional(z.pipe(z.date(), z.transform(v => v.toISOString()))),
   }),
   z.transform((v) => {
@@ -68,17 +109,36 @@ export function ap2CreateMandateRequestToJSON(
 }
 
 /** @internal */
+export const Contents$inboundSchema: z.ZodMiniType<Contents, unknown> = z
+  .object({});
+
+export function contentsFromJSON(
+  jsonString: string,
+): SafeParseResult<Contents, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Contents$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Contents' from JSON`,
+  );
+}
+
+/** @internal */
 export const Ap2CreateMandateResponse$inboundSchema: z.ZodMiniType<
   Ap2CreateMandateResponse,
   unknown
 > = z.pipe(
   z.object({
     mandate_id: types.optional(types.string()),
-    status: types.optional(types.string()),
+    type: types.optional(types.string()),
+    contents: types.optional(z.lazy(() => Contents$inboundSchema)),
+    merchant_signature: types.optional(types.string()),
+    ttl: types.optional(types.string()),
+    protocol: types.optional(types.string()),
   }),
   z.transform((v) => {
     return remap$(v, {
       "mandate_id": "mandateId",
+      "merchant_signature": "merchantSignature",
     });
   }),
 );

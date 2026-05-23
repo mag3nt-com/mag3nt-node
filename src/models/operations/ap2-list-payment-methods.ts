@@ -7,12 +7,15 @@ import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
+import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
+
+export type Available = number | string;
 
 export type Method = {
   type?: string | undefined;
   cardId?: string | undefined;
-  available?: number | undefined;
+  available?: number | string | undefined;
 };
 
 /**
@@ -23,11 +26,25 @@ export type Ap2ListPaymentMethodsResponse = {
 };
 
 /** @internal */
+export const Available$inboundSchema: z.ZodMiniType<Available, unknown> =
+  smartUnion([types.number(), types.string()]);
+
+export function availableFromJSON(
+  jsonString: string,
+): SafeParseResult<Available, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Available$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Available' from JSON`,
+  );
+}
+
+/** @internal */
 export const Method$inboundSchema: z.ZodMiniType<Method, unknown> = z.pipe(
   z.object({
     type: types.optional(types.string()),
     card_id: types.optional(types.string()),
-    available: types.optional(types.number()),
+    available: types.optional(smartUnion([types.number(), types.string()])),
   }),
   z.transform((v) => {
     return remap$(v, {

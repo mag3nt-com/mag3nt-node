@@ -7,7 +7,18 @@ import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
+import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
+
+/**
+ * Total budget for the stream in USDC
+ */
+export type BudgetRequest = number | string;
+
+/**
+ * Amount per tick
+ */
+export type TickAmountRequest = number | string;
 
 export type MppStreamsOpenRequest = {
   cardId: string;
@@ -15,13 +26,19 @@ export type MppStreamsOpenRequest = {
   /**
    * Total budget for the stream in USDC
    */
-  budget: number;
+  budget: number | string;
   /**
    * Amount per tick
    */
-  tickAmount: number;
+  tickAmount: number | string;
   receiverCardId?: string | undefined;
 };
+
+export type MppStreamsOpenBudgetResponse = number | string;
+
+export type MppStreamsOpenTickAmountResponse = number | string;
+
+export type MppStreamsOpenTotalTicked = number | string;
 
 /**
  * Stream opened
@@ -29,19 +46,49 @@ export type MppStreamsOpenRequest = {
 export type MppStreamsOpenResponse = {
   id?: string | undefined;
   cardId?: string | undefined;
-  budget?: number | undefined;
-  tickAmount?: number | undefined;
-  totalTicked?: number | undefined;
+  budget?: number | string | undefined;
+  tickAmount?: number | string | undefined;
+  totalTicked?: number | string | undefined;
   status?: string | undefined;
   receiverCardId?: string | undefined;
 };
 
 /** @internal */
+export type BudgetRequest$Outbound = number | string;
+
+/** @internal */
+export const BudgetRequest$outboundSchema: z.ZodMiniType<
+  BudgetRequest$Outbound,
+  BudgetRequest
+> = smartUnion([z.number(), z.string()]);
+
+export function budgetRequestToJSON(budgetRequest: BudgetRequest): string {
+  return JSON.stringify(BudgetRequest$outboundSchema.parse(budgetRequest));
+}
+
+/** @internal */
+export type TickAmountRequest$Outbound = number | string;
+
+/** @internal */
+export const TickAmountRequest$outboundSchema: z.ZodMiniType<
+  TickAmountRequest$Outbound,
+  TickAmountRequest
+> = smartUnion([z.number(), z.string()]);
+
+export function tickAmountRequestToJSON(
+  tickAmountRequest: TickAmountRequest,
+): string {
+  return JSON.stringify(
+    TickAmountRequest$outboundSchema.parse(tickAmountRequest),
+  );
+}
+
+/** @internal */
 export type MppStreamsOpenRequest$Outbound = {
   card_id: string;
   card_token: string;
-  budget: number;
-  tick_amount: number;
+  budget: number | string;
+  tick_amount: number | string;
   receiver_card_id?: string | undefined;
 };
 
@@ -53,8 +100,8 @@ export const MppStreamsOpenRequest$outboundSchema: z.ZodMiniType<
   z.object({
     cardId: z.string(),
     cardToken: z.string(),
-    budget: z.number(),
-    tickAmount: z.number(),
+    budget: smartUnion([z.number(), z.string()]),
+    tickAmount: smartUnion([z.number(), z.string()]),
     receiverCardId: z.optional(z.string()),
   }),
   z.transform((v) => {
@@ -76,6 +123,54 @@ export function mppStreamsOpenRequestToJSON(
 }
 
 /** @internal */
+export const MppStreamsOpenBudgetResponse$inboundSchema: z.ZodMiniType<
+  MppStreamsOpenBudgetResponse,
+  unknown
+> = smartUnion([types.number(), types.string()]);
+
+export function mppStreamsOpenBudgetResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<MppStreamsOpenBudgetResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => MppStreamsOpenBudgetResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MppStreamsOpenBudgetResponse' from JSON`,
+  );
+}
+
+/** @internal */
+export const MppStreamsOpenTickAmountResponse$inboundSchema: z.ZodMiniType<
+  MppStreamsOpenTickAmountResponse,
+  unknown
+> = smartUnion([types.number(), types.string()]);
+
+export function mppStreamsOpenTickAmountResponseFromJSON(
+  jsonString: string,
+): SafeParseResult<MppStreamsOpenTickAmountResponse, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => MppStreamsOpenTickAmountResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MppStreamsOpenTickAmountResponse' from JSON`,
+  );
+}
+
+/** @internal */
+export const MppStreamsOpenTotalTicked$inboundSchema: z.ZodMiniType<
+  MppStreamsOpenTotalTicked,
+  unknown
+> = smartUnion([types.number(), types.string()]);
+
+export function mppStreamsOpenTotalTickedFromJSON(
+  jsonString: string,
+): SafeParseResult<MppStreamsOpenTotalTicked, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => MppStreamsOpenTotalTicked$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MppStreamsOpenTotalTicked' from JSON`,
+  );
+}
+
+/** @internal */
 export const MppStreamsOpenResponse$inboundSchema: z.ZodMiniType<
   MppStreamsOpenResponse,
   unknown
@@ -83,9 +178,9 @@ export const MppStreamsOpenResponse$inboundSchema: z.ZodMiniType<
   z.object({
     id: types.optional(types.string()),
     card_id: types.optional(types.string()),
-    budget: types.optional(types.number()),
-    tick_amount: types.optional(types.number()),
-    total_ticked: types.optional(types.number()),
+    budget: types.optional(smartUnion([types.number(), types.string()])),
+    tick_amount: types.optional(smartUnion([types.number(), types.string()])),
+    total_ticked: types.optional(smartUnion([types.number(), types.string()])),
     status: types.optional(types.string()),
     receiver_card_id: types.optional(types.string()),
   }),

@@ -9,7 +9,10 @@ import * as openEnums from "../../types/enums.js";
 import { OpenEnum } from "../../types/enums.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import * as types from "../../types/primitives.js";
+import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
+
+export type LimitAmount = number | string;
 
 export const CardStatus = {
   Active: "ACTIVE",
@@ -27,11 +30,15 @@ export const SingleUse = {
 } as const;
 export type SingleUse = OpenEnum<typeof SingleUse>;
 
+export type BalanceUnion = number | string;
+
+export type Remaining = number | string;
+
 export type Card = {
   id?: string | undefined;
   token?: string | undefined;
   purpose?: string | undefined;
-  limitAmount?: number | undefined;
+  limitAmount?: number | string | undefined;
   status?: CardStatus | undefined;
   mccLocks?: string | undefined;
   singleUse?: SingleUse | undefined;
@@ -39,10 +46,24 @@ export type Card = {
   fundingNetwork?: string | undefined;
   fundingAsset?: string | undefined;
   walletAddress?: string | undefined;
-  balance?: number | undefined;
-  remaining?: number | undefined;
+  balance?: number | string | undefined;
+  remaining?: number | string | undefined;
   createdAt?: Date | undefined;
 };
+
+/** @internal */
+export const LimitAmount$inboundSchema: z.ZodMiniType<LimitAmount, unknown> =
+  smartUnion([types.number(), types.string()]);
+
+export function limitAmountFromJSON(
+  jsonString: string,
+): SafeParseResult<LimitAmount, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => LimitAmount$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'LimitAmount' from JSON`,
+  );
+}
 
 /** @internal */
 export const CardStatus$inboundSchema: z.ZodMiniType<CardStatus, unknown> =
@@ -53,12 +74,40 @@ export const SingleUse$inboundSchema: z.ZodMiniType<SingleUse, unknown> =
   openEnums.inboundSchemaInt(SingleUse);
 
 /** @internal */
+export const BalanceUnion$inboundSchema: z.ZodMiniType<BalanceUnion, unknown> =
+  smartUnion([types.number(), types.string()]);
+
+export function balanceUnionFromJSON(
+  jsonString: string,
+): SafeParseResult<BalanceUnion, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => BalanceUnion$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'BalanceUnion' from JSON`,
+  );
+}
+
+/** @internal */
+export const Remaining$inboundSchema: z.ZodMiniType<Remaining, unknown> =
+  smartUnion([types.number(), types.string()]);
+
+export function remainingFromJSON(
+  jsonString: string,
+): SafeParseResult<Remaining, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Remaining$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Remaining' from JSON`,
+  );
+}
+
+/** @internal */
 export const Card$inboundSchema: z.ZodMiniType<Card, unknown> = z.pipe(
   z.object({
     id: types.optional(types.string()),
     token: types.optional(types.string()),
     purpose: types.optional(types.string()),
-    limit_amount: types.optional(types.number()),
+    limit_amount: types.optional(smartUnion([types.number(), types.string()])),
     status: types.optional(CardStatus$inboundSchema),
     mcc_locks: types.optional(types.string()),
     single_use: types.optional(SingleUse$inboundSchema),
@@ -66,8 +115,8 @@ export const Card$inboundSchema: z.ZodMiniType<Card, unknown> = z.pipe(
     funding_network: types.optional(types.string()),
     funding_asset: types.optional(types.string()),
     wallet_address: types.optional(types.string()),
-    balance: types.optional(types.number()),
-    remaining: types.optional(types.number()),
+    balance: types.optional(smartUnion([types.number(), types.string()])),
+    remaining: types.optional(smartUnion([types.number(), types.string()])),
     created_at: types.optional(types.date()),
   }),
   z.transform((v) => {
