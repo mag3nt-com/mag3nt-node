@@ -31,6 +31,7 @@ export type PayLinksCreateRequest = {
    */
   amount?: string | number | null | undefined;
   memo?: string | undefined;
+  acceptedProtocols?: Array<string> | undefined;
   /**
    * SINGLE for one-time, RECURRING for multi-use
    */
@@ -69,6 +70,7 @@ export type PayLinksCreateRequest$Outbound = {
   card_id: string;
   amount?: string | number | null | undefined;
   memo?: string | undefined;
+  accepted_protocols?: Array<string> | undefined;
   type: string;
   max_uses: number;
   expires_in?: number | undefined;
@@ -83,6 +85,7 @@ export const PayLinksCreateRequest$outboundSchema: z.ZodMiniType<
     cardId: z.string(),
     amount: z.optional(z.nullable(smartUnion([z.string(), z.number()]))),
     memo: z.optional(z.string()),
+    acceptedProtocols: z.optional(z.array(z.string())),
     type: z._default(PayLinksCreateType$outboundSchema, "SINGLE"),
     maxUses: z._default(z.int(), 1),
     expiresIn: z.optional(z.number()),
@@ -90,6 +93,7 @@ export const PayLinksCreateRequest$outboundSchema: z.ZodMiniType<
   z.transform((v) => {
     return remap$(v, {
       cardId: "card_id",
+      acceptedProtocols: "accepted_protocols",
       maxUses: "max_uses",
       expiresIn: "expires_in",
     });

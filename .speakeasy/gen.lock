@@ -1,17 +1,17 @@
 lockVersion: 2.0.0
-id: 9de9ed4c-428d-4eda-aad2-1f92a25e7854
+id: 0ac3c60d-e64e-413a-8dbd-a9db46ff53cd
 management:
-  docChecksum: 3022963e34bfbdb1883af39866c98db1
+  docChecksum: f464ddd4210c550277f4babe3deb0969
   docVersion: "2026-05-23"
   speakeasyVersion: 1.764.1
   generationVersion: 2.885.1
-  releaseVersion: 0.1.4
-  configChecksum: f19320e7b739a7bb1954ce5a5377304d
+  releaseVersion: 0.1.5
+  configChecksum: 74cf48e98a15c75b3b19ac1593baefb0
   published: true
 persistentEdits:
-  generation_id: ea5a1d3c-1e2a-4153-b624-8a15abe10c25
-  pristine_commit_hash: 593b83d9b6d9e6cccf264f3caddfd2007719f2c6
-  pristine_tree_hash: d7b9764a5ddfc725ccc21e33ffd132b4c29fa335
+  generation_id: ed6bd90d-7688-42e7-a794-a7739c4cb597
+  pristine_commit_hash: 61582fdd72956d8eaeb4ce733feefe150fdda20a
+  pristine_tree_hash: a6678f69aa4ba29c56f8121bfb5a79d152619a38
 features:
   typescript:
     additionalDependencies: 0.1.0
@@ -479,8 +479,8 @@ trackedFiles:
     pristine_git_object: ed9493a6281cedcb770018f68e076fd7191fb391
   docs/models/operations/pay-links-create-request.md:
     id: bfa2f8dcd718
-    last_write_checksum: sha1:c889d0d3d970c69005ff92f34ea1730bf99d2d95
-    pristine_git_object: 40579d4ca6db290d3931ad818f8d52008364af5a
+    last_write_checksum: sha1:7de5b89ca8e86ecb611117dca18d12f342dd5115
+    pristine_git_object: 55dd1caeb74a5994f184bbdd7526baebcfd03d2f
   docs/models/operations/pay-links-create-type.md:
     id: b06f5066eeb0
     last_write_checksum: sha1:e8b573745eeba9742d0128d53fc2ba468656de91
@@ -699,12 +699,12 @@ trackedFiles:
     pristine_git_object: 38a2a07a7944a88d96cff3399ac158475a71c6ec
   jsr.json:
     id: 7f6ab7767282
-    last_write_checksum: sha1:dde5a445e6c50835f1c1cee3160e4fc5413d02d0
-    pristine_git_object: f2260356bd313bfac7050cd7a596891719712251
+    last_write_checksum: sha1:4fab1287e9d543b49bd70edf0263484900473c66
+    pristine_git_object: 341bdce1d40b3ddc6fb33a04f516786661ad4594
   package.json:
     id: 7030d0b2f71b
-    last_write_checksum: sha1:cacee01e3efbb88dfdb2c69dfcd2de6b66028e90
-    pristine_git_object: 0e788050f8328c3a23f248972b821b3c119308d8
+    last_write_checksum: sha1:c227286d0d7aeefc9ee10dc04dd9c86807b624c9
+    pristine_git_object: bc0d37536f96c6ed2e3cdb2a05868d4ef497d5a9
   src/core.ts:
     id: f431fdbcd144
     last_write_checksum: sha1:fae6a9595c504359bbd5589248651ffaeb25d88a
@@ -895,8 +895,8 @@ trackedFiles:
     pristine_git_object: 44be0eae8246521b230e8e711a88eff738fc015d
   src/lib/config.ts:
     id: 320761608fb3
-    last_write_checksum: sha1:915f3f5a90f93e0e9b5bbf4c01178087ccd2c8a0
-    pristine_git_object: 4f8b1341776cabcb735d5b5c08f969dc04918ef3
+    last_write_checksum: sha1:529776cec41e16be0aa853c0e07598a83ab90e7a
+    pristine_git_object: 37ddd4bd775d2e757139aecf204410edc5d5938c
   src/lib/dlv.ts:
     id: b1988214835a
     last_write_checksum: sha1:1dd3e3fbb4550c4bf31f5ef997faff355d6f3250
@@ -1139,8 +1139,8 @@ trackedFiles:
     pristine_git_object: f39cd6bc066ea238408e2fdfb9641208e4ec44db
   src/models/operations/pay-links-create.ts:
     id: 88d3d535f3e3
-    last_write_checksum: sha1:c0e1bcef8f37bec23179586f374d33a47fc7f486
-    pristine_git_object: 4de8f386b3e62037bd3633b7ce41c0293df0b812
+    last_write_checksum: sha1:0bf4a7a3cd2cac33a9a2594d578cda822b5f1430
+    pristine_git_object: 82146f8ff399fe806cb8232926f6762622bc53bd
   src/models/operations/pay-links-get-status.ts:
     id: a16a74962800
     last_write_checksum: sha1:90fece75ac7fa7759303ed053326887c38f4644c
