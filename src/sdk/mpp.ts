@@ -16,15 +16,18 @@ import { unwrapAsync } from "../types/fp.js";
 
 export class Mpp extends ClientSDK {
   /**
-   * Make a micropayment via MPP protocol
+   * (Removed) Make a micropayment via MPP protocol
+   *
+   * @remarks
+   * This proprietary push endpoint has been removed. Use POST /api/pay with { card_id, card_token, url } instead. It automatically decodes the MPP challenge and settles on-chain.
+   *
+   * @deprecated method: This will be removed in a future release, please migrate away from it as soon as possible.
    */
   async mppPay(
-    request: operations.MppPayRequest,
     options?: RequestOptions,
-  ): Promise<operations.MppPayResponse> {
+  ): Promise<void> {
     return unwrapAsync(mppMPPPay(
       this,
-      request,
       options,
     ));
   }

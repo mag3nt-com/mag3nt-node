@@ -9,7 +9,7 @@ import { Mag3ntError } from "./mag3nt-error.js";
 /**
  * Pay link has been used
  */
-export type GoneErrorData = {
+export type PayLinksGetStatusGoneErrorData = {
   status?: string | undefined;
   error?: string | undefined;
 };
@@ -17,15 +17,15 @@ export type GoneErrorData = {
 /**
  * Pay link has been used
  */
-export class GoneError extends Mag3ntError {
+export class PayLinksGetStatusGoneError extends Mag3ntError {
   status?: string | undefined;
   error?: string | undefined;
 
   /** The original data that was passed to this error instance. */
-  data$: GoneErrorData;
+  data$: PayLinksGetStatusGoneErrorData;
 
   constructor(
-    err: GoneErrorData,
+    err: PayLinksGetStatusGoneErrorData,
     httpMeta: { response: Response; request: Request; body: string },
   ) {
     const message = "message" in err && typeof err.message === "string"
@@ -36,25 +36,27 @@ export class GoneError extends Mag3ntError {
     if (err.status != null) this.status = err.status;
     if (err.error != null) this.error = err.error;
 
-    this.name = "GoneError";
+    this.name = "PayLinksGetStatusGoneError";
   }
 }
 
 /** @internal */
-export const GoneError$inboundSchema: z.ZodMiniType<GoneError, unknown> = z
-  .pipe(
-    z.object({
-      status: types.optional(types.string()),
-      error: types.optional(types.string()),
-      request$: z.custom<Request>(x => x instanceof Request),
-      response$: z.custom<Response>(x => x instanceof Response),
-      body$: z.string(),
-    }),
-    z.transform((v) => {
-      return new GoneError(v, {
-        request: v.request$,
-        response: v.response$,
-        body: v.body$,
-      });
-    }),
-  );
+export const PayLinksGetStatusGoneError$inboundSchema: z.ZodMiniType<
+  PayLinksGetStatusGoneError,
+  unknown
+> = z.pipe(
+  z.object({
+    status: types.optional(types.string()),
+    error: types.optional(types.string()),
+    request$: z.custom<Request>(x => x instanceof Request),
+    response$: z.custom<Response>(x => x instanceof Response),
+    body$: z.string(),
+  }),
+  z.transform((v) => {
+    return new PayLinksGetStatusGoneError(v, {
+      request: v.request$,
+      response: v.response$,
+      body: v.body$,
+    });
+  }),
+);

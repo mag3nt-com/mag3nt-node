@@ -3,7 +3,9 @@
  */
 
 import { fundingFundingGetBalance } from "../funcs/funding-funding-get-balance.js";
+import { fundingFundingGetWalletBalance } from "../funcs/funding-funding-get-wallet-balance.js";
 import { fundingFundingListTokens } from "../funcs/funding-funding-list-tokens.js";
+import { fundingFundingVerify } from "../funcs/funding-funding-verify.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as operations from "../models/operations/index.js";
 import { unwrapAsync } from "../types/fp.js";
@@ -29,6 +31,44 @@ export class Funding extends ClientSDK {
   ): Promise<operations.FundingGetBalanceResponse> {
     return unwrapAsync(fundingFundingGetBalance(
       this,
+      options,
+    ));
+  }
+
+  /**
+   * Verify an on-chain funding transaction
+   *
+   * @remarks
+   * Submit an on-chain transaction hash to credit your treasury balance. The platform verifies the transaction on-chain, confirms the Transfer event matches the treasury address, and atomically credits your balance. Idempotent: re-submitting an already-confirmed tx_hash returns the existing balance without double-crediting.
+   */
+  async fundingVerify(
+    request: operations.FundingVerifyRequest,
+    options?: RequestOptions,
+  ): Promise<operations.FundingVerifyResponse> {
+    return unwrapAsync(fundingFundingVerify(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Get on-chain token balance for a wallet address
+   *
+   * @remarks
+   * Queries the blockchain directly to return the real-time token balance for a given wallet address on a specific network. Supports EVM and Solana.
+   */
+  async fundingGetWalletBalance(
+    network: string,
+    asset: string,
+    address?: string | undefined,
+    options?: RequestOptions,
+  ): Promise<operations.FundingGetWalletBalanceResponse> {
+    return unwrapAsync(fundingFundingGetWalletBalance(
+      this,
+      network,
+      asset,
+      address,
       options,
     ));
   }

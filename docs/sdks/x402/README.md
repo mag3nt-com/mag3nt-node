@@ -6,14 +6,16 @@ HTTP 402 payment protocol
 
 ### Available Operations
 
-* [x402Pay](#x402pay) - Pay for a service via x402 protocol
+* [~~x402Pay~~](#x402pay) - (Removed) Pay for a service via x402 protocol :warning: **Deprecated**
 * [x402Discover](#x402discover) - Discover x402 payment requirements for a URL
 * [x402Receive](#x402receive) - Verify and accept an x402 payment
 
-## x402Pay
+## ~~x402Pay~~
 
-Authorizes a payment against a funded card. The card must be ACTIVE with sufficient allocation. Returns payment headers the agent can attach to retry the original 402 request.
+This proprietary push endpoint has been removed. Use POST /api/pay with { card_id, card_token, url } instead. It automatically detects x402 and settles on-chain.
 
+
+> :warning: **DEPRECATED**: This will be removed in a future release, please migrate away from it as soon as possible.
 
 ### Example Usage
 
@@ -26,15 +28,9 @@ const mag3nt = new Mag3nt({
 });
 
 async function run() {
-  const result = await mag3nt.x402.x402Pay({
-    cardId: "sx_a66a6666-...",
-    cardToken: "tok_3b9fe670-...",
-    amount: 0.5,
-    merchant: "weather-api.com",
-    merchantAddress: "0xABC...",
-  });
+  await mag3nt.x402.x402Pay();
 
-  console.log(result);
+
 }
 
 run();
@@ -55,16 +51,10 @@ const mag3nt = new Mag3ntCore({
 });
 
 async function run() {
-  const res = await x402X402Pay(mag3nt, {
-    cardId: "sx_a66a6666-...",
-    cardToken: "tok_3b9fe670-...",
-    amount: 0.5,
-    merchant: "weather-api.com",
-    merchantAddress: "0xABC...",
-  });
+  const res = await x402X402Pay(mag3nt);
   if (res.ok) {
     const { value: result } = res;
-    console.log(result);
+    
   } else {
     console.log("x402X402Pay failed:", res.error);
   }
@@ -77,20 +67,19 @@ run();
 
 | Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.X402PayRequest](../../models/operations/x402-pay-request.md)                                                                                                       | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
 | `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
 | `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
 | `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
 
 ### Response
 
-**Promise\<[operations.X402PayResponse](../../models/operations/x402-pay-response.md)\>**
+**Promise\<void\>**
 
 ### Errors
 
 | Error Type                | Status Code               | Content Type              |
 | ------------------------- | ------------------------- | ------------------------- |
-| errors.ErrorT             | 400, 401, 403, 404        | application/json          |
+| errors.X402PayGoneError   | 410                       | application/json          |
 | errors.Mag3ntDefaultError | 4XX, 5XX                  | \*/\*                     |
 
 ## x402Discover

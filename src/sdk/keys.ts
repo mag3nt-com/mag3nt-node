@@ -15,7 +15,7 @@ export class Keys extends ClientSDK {
    * Generate a new API key
    *
    * @remarks
-   * Returns the raw key once. Store it securely — it cannot be retrieved again.
+   * Returns the raw key once. Store it securely: it cannot be retrieved again.
    */
   async keysCreate(
     options?: RequestOptions,

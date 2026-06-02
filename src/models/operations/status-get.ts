@@ -34,7 +34,7 @@ export type Mpp = {
   capabilities?: Array<string> | undefined;
 };
 
-export type Settlement = {
+export type StatusGetSettlement = {
   status?: string | undefined;
   feeModel?: string | undefined;
   engine?: string | undefined;
@@ -45,7 +45,7 @@ export type Protocols = {
   x402?: X402 | undefined;
   ap2?: Ap2 | undefined;
   mpp?: Mpp | undefined;
-  settlement?: Settlement | undefined;
+  settlement?: StatusGetSettlement | undefined;
 };
 
 export type CardControls = {
@@ -125,29 +125,31 @@ export function mppFromJSON(
 }
 
 /** @internal */
-export const Settlement$inboundSchema: z.ZodMiniType<Settlement, unknown> = z
-  .pipe(
-    z.object({
-      status: types.optional(types.string()),
-      fee_model: types.optional(types.string()),
-      engine: types.optional(types.string()),
-      supported_networks: types.optional(z.array(types.string())),
-    }),
-    z.transform((v) => {
-      return remap$(v, {
-        "fee_model": "feeModel",
-        "supported_networks": "supportedNetworks",
-      });
-    }),
-  );
+export const StatusGetSettlement$inboundSchema: z.ZodMiniType<
+  StatusGetSettlement,
+  unknown
+> = z.pipe(
+  z.object({
+    status: types.optional(types.string()),
+    fee_model: types.optional(types.string()),
+    engine: types.optional(types.string()),
+    supported_networks: types.optional(z.array(types.string())),
+  }),
+  z.transform((v) => {
+    return remap$(v, {
+      "fee_model": "feeModel",
+      "supported_networks": "supportedNetworks",
+    });
+  }),
+);
 
-export function settlementFromJSON(
+export function statusGetSettlementFromJSON(
   jsonString: string,
-): SafeParseResult<Settlement, SDKValidationError> {
+): SafeParseResult<StatusGetSettlement, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => Settlement$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'Settlement' from JSON`,
+    (x) => StatusGetSettlement$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'StatusGetSettlement' from JSON`,
   );
 }
 
@@ -157,7 +159,7 @@ export const Protocols$inboundSchema: z.ZodMiniType<Protocols, unknown> = z
     x402: types.optional(z.lazy(() => X402$inboundSchema)),
     ap2: types.optional(z.lazy(() => Ap2$inboundSchema)),
     mpp: types.optional(z.lazy(() => Mpp$inboundSchema)),
-    settlement: types.optional(z.lazy(() => Settlement$inboundSchema)),
+    settlement: types.optional(z.lazy(() => StatusGetSettlement$inboundSchema)),
   });
 
 export function protocolsFromJSON(

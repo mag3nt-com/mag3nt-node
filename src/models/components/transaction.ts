@@ -14,19 +14,19 @@ import { SDKValidationError } from "../errors/sdk-validation-error.js";
 
 export type TransactionAmount = number | string;
 
-export const Protocol = {
+export const TransactionProtocol = {
   X402: "x402",
   Ap2: "ap2",
   Mpp: "mpp",
 } as const;
-export type Protocol = OpenEnum<typeof Protocol>;
+export type TransactionProtocol = OpenEnum<typeof TransactionProtocol>;
 
 export type Transaction = {
   id?: string | undefined;
   cardId?: string | undefined;
   amount?: number | string | undefined;
   merchant?: string | undefined;
-  protocol?: Protocol | undefined;
+  protocol?: TransactionProtocol | undefined;
   status?: string | undefined;
   txHash?: string | undefined;
   network?: string | undefined;
@@ -50,8 +50,10 @@ export function transactionAmountFromJSON(
 }
 
 /** @internal */
-export const Protocol$inboundSchema: z.ZodMiniType<Protocol, unknown> =
-  openEnums.inboundSchema(Protocol);
+export const TransactionProtocol$inboundSchema: z.ZodMiniType<
+  TransactionProtocol,
+  unknown
+> = openEnums.inboundSchema(TransactionProtocol);
 
 /** @internal */
 export const Transaction$inboundSchema: z.ZodMiniType<Transaction, unknown> = z
@@ -61,7 +63,7 @@ export const Transaction$inboundSchema: z.ZodMiniType<Transaction, unknown> = z
       card_id: types.optional(types.string()),
       amount: types.optional(smartUnion([types.number(), types.string()])),
       merchant: types.optional(types.string()),
-      protocol: types.optional(Protocol$inboundSchema),
+      protocol: types.optional(TransactionProtocol$inboundSchema),
       status: types.optional(types.string()),
       tx_hash: types.optional(types.string()),
       network: types.optional(types.string()),

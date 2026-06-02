@@ -14,6 +14,9 @@ Developer-friendly & type-safe Typescript SDK specifically catered to leverage *
 ## Summary
 
 mag3nt API: Payment infrastructure for AI agents. Issue virtual cards, pay for API access via x402/AP2/MPP protocols, and settle in USDC on Base.
+
+
+For more information about the API: [mag3nt documentation](https://docs.mag3nt.com)
 <!-- End Summary [summary] -->
 
 <!-- Start Table of Contents [toc] -->
@@ -143,6 +146,7 @@ run();
 * [ap2CreateMandate](docs/sdks/ap2/README.md#ap2createmandate) - Create a spending mandate for recurring AP2 payments
 * [ap2Execute](docs/sdks/ap2/README.md#ap2execute) - Execute a payment against an AP2 mandate
 * [ap2ListMandates](docs/sdks/ap2/README.md#ap2listmandates) - List mandates for a card
+* [ap2Settle](docs/sdks/ap2/README.md#ap2settle) - Settle an AP2 payment between agents
 
 ### [Cards](docs/sdks/cards/README.md)
 
@@ -154,11 +158,14 @@ run();
 * [cardsClaim](docs/sdks/cards/README.md#cardsclaim) - Claim a card using its token
 * [cardsUpdateControls](docs/sdks/cards/README.md#cardsupdatecontrols) - Update card spending controls
 * [cardsListTransactions](docs/sdks/cards/README.md#cardslisttransactions) - List transactions for a card
+* [cardsTopUp](docs/sdks/cards/README.md#cardstopup) - Add funds to an existing card from treasury balance
 
 ### [Funding](docs/sdks/funding/README.md)
 
 * [fundingListTokens](docs/sdks/funding/README.md#fundinglisttokens) - List accepted tokens per network
 * [fundingGetBalance](docs/sdks/funding/README.md#fundinggetbalance) - Get treasury balance for authenticated wallet
+* [fundingVerify](docs/sdks/funding/README.md#fundingverify) - Verify an on-chain funding transaction
+* [fundingGetWalletBalance](docs/sdks/funding/README.md#fundinggetwalletbalance) - Get on-chain token balance for a wallet address
 
 ### [Keys](docs/sdks/keys/README.md)
 
@@ -169,7 +176,7 @@ run();
 
 ### [Mpp](docs/sdks/mpp/README.md)
 
-* [mppPay](docs/sdks/mpp/README.md#mpppay) - Make a micropayment via MPP protocol
+* [~~mppPay~~](docs/sdks/mpp/README.md#mpppay) - (Removed) Make a micropayment via MPP protocol :warning: **Deprecated**
 * [mppCreateSession](docs/sdks/mpp/README.md#mppcreatesession) - Create an MPP payment session
 * [mppDiscover](docs/sdks/mpp/README.md#mppdiscover) - Discover MPP capabilities for a URL
 * [mppReceive](docs/sdks/mpp/README.md#mppreceive) - Verify and accept an MPP payment
@@ -189,6 +196,10 @@ run();
 * [payLinksPrepare](docs/sdks/paylinks/README.md#paylinksprepare) - Prepare payment intent for a pay link
 * [payLinksSettle](docs/sdks/paylinks/README.md#paylinkssettle) - Settle a pay link payment
 
+### [Payments](docs/sdks/payments/README.md)
+
+* [paymentsExecute](docs/sdks/payments/README.md#paymentsexecute) - Execute a universal outbound payment
+
 ### [Settlement](docs/sdks/settlement/README.md)
 
 * [settlementGetStatus](docs/sdks/settlement/README.md#settlementgetstatus) - Check settlement status for a transaction
@@ -198,9 +209,20 @@ run();
 * [statusGet](docs/sdks/status/README.md#statusget) - Get platform status, supported protocols, and capabilities
 * [statusGetConfig](docs/sdks/status/README.md#statusgetconfig) - Get treasury addresses and token registry
 
+### [Webhooks](docs/sdks/webhooks/README.md)
+
+* [webhooksCreate](docs/sdks/webhooks/README.md#webhookscreate) - Register a webhook endpoint
+* [webhooksList](docs/sdks/webhooks/README.md#webhookslist) - List registered webhooks
+* [webhooksDelete](docs/sdks/webhooks/README.md#webhooksdelete) - Delete a webhook endpoint
+
+### [Withdrawals](docs/sdks/withdrawals/README.md)
+
+* [withdrawalsCreate](docs/sdks/withdrawals/README.md#withdrawalscreate) - Withdraw unspent funds back to your wallet
+* [withdrawalsList](docs/sdks/withdrawals/README.md#withdrawalslist) - List withdrawal history
+
 ### [X402](docs/sdks/x402/README.md)
 
-* [x402Pay](docs/sdks/x402/README.md#x402pay) - Pay for a service via x402 protocol
+* [~~x402Pay~~](docs/sdks/x402/README.md#x402pay) - (Removed) Pay for a service via x402 protocol :warning: **Deprecated**
 * [x402Discover](docs/sdks/x402/README.md#x402discover) - Discover x402 payment requirements for a URL
 * [x402Receive](docs/sdks/x402/README.md#x402receive) - Verify and accept an x402 payment
 
@@ -227,23 +249,26 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`ap2Ap2GetAgentCard`](docs/sdks/ap2/README.md#ap2getagentcard) - Get the default agent card for AP2 payments
 - [`ap2Ap2ListMandates`](docs/sdks/ap2/README.md#ap2listmandates) - List mandates for a card
 - [`ap2Ap2ListPaymentMethods`](docs/sdks/ap2/README.md#ap2listpaymentmethods) - List available payment methods for AP2
+- [`ap2Ap2Settle`](docs/sdks/ap2/README.md#ap2settle) - Settle an AP2 payment between agents
 - [`cardsCardsBulkCreate`](docs/sdks/cards/README.md#cardsbulkcreate) - Issue multiple cards in a single atomic request
 - [`cardsCardsClaim`](docs/sdks/cards/README.md#cardsclaim) - Claim a card using its token
 - [`cardsCardsCreate`](docs/sdks/cards/README.md#cardscreate) - Issue a new virtual payment card
 - [`cardsCardsFreeze`](docs/sdks/cards/README.md#cardsfreeze) - Freeze a card to block all transactions
 - [`cardsCardsList`](docs/sdks/cards/README.md#cardslist) - List all cards for the authenticated wallet
 - [`cardsCardsListTransactions`](docs/sdks/cards/README.md#cardslisttransactions) - List transactions for a card
+- [`cardsCardsTopUp`](docs/sdks/cards/README.md#cardstopup) - Add funds to an existing card from treasury balance
 - [`cardsCardsUnfreeze`](docs/sdks/cards/README.md#cardsunfreeze) - Unfreeze a previously frozen card
 - [`cardsCardsUpdateControls`](docs/sdks/cards/README.md#cardsupdatecontrols) - Update card spending controls
 - [`fundingFundingGetBalance`](docs/sdks/funding/README.md#fundinggetbalance) - Get treasury balance for authenticated wallet
+- [`fundingFundingGetWalletBalance`](docs/sdks/funding/README.md#fundinggetwalletbalance) - Get on-chain token balance for a wallet address
 - [`fundingFundingListTokens`](docs/sdks/funding/README.md#fundinglisttokens) - List accepted tokens per network
+- [`fundingFundingVerify`](docs/sdks/funding/README.md#fundingverify) - Verify an on-chain funding transaction
 - [`keysKeysCreate`](docs/sdks/keys/README.md#keyscreate) - Generate a new API key
 - [`keysKeysList`](docs/sdks/keys/README.md#keyslist) - List all API keys for the authenticated wallet
 - [`keysKeysRevoke`](docs/sdks/keys/README.md#keysrevoke) - Revoke an API key
 - [`keysKeysValidate`](docs/sdks/keys/README.md#keysvalidate) - Validate an API key
 - [`mppMPPCreateSession`](docs/sdks/mpp/README.md#mppcreatesession) - Create an MPP payment session
 - [`mppMPPDiscover`](docs/sdks/mpp/README.md#mppdiscover) - Discover MPP capabilities for a URL
-- [`mppMPPPay`](docs/sdks/mpp/README.md#mpppay) - Make a micropayment via MPP protocol
 - [`mppMPPReceive`](docs/sdks/mpp/README.md#mppreceive) - Verify and accept an MPP payment
 - [`mppMPPStreamsClose`](docs/sdks/mpp/README.md#mppstreamsclose) - Close a payment stream
 - [`mppMPPStreamsGet`](docs/sdks/mpp/README.md#mppstreamsget) - Get payment stream details
@@ -257,12 +282,19 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`payLinksPayLinksPrepare`](docs/sdks/paylinks/README.md#paylinksprepare) - Prepare payment intent for a pay link
 - [`payLinksPayLinksResolve`](docs/sdks/paylinks/README.md#paylinksresolve) - Resolve a pay link for payment processing
 - [`payLinksPayLinksSettle`](docs/sdks/paylinks/README.md#paylinkssettle) - Settle a pay link payment
+- [`paymentsPaymentsExecute`](docs/sdks/payments/README.md#paymentsexecute) - Execute a universal outbound payment
 - [`settlementSettlementGetStatus`](docs/sdks/settlement/README.md#settlementgetstatus) - Check settlement status for a transaction
 - [`statusStatusGet`](docs/sdks/status/README.md#statusget) - Get platform status, supported protocols, and capabilities
 - [`statusStatusGetConfig`](docs/sdks/status/README.md#statusgetconfig) - Get treasury addresses and token registry
+- [`webhooksWebhooksCreate`](docs/sdks/webhooks/README.md#webhookscreate) - Register a webhook endpoint
+- [`webhooksWebhooksDelete`](docs/sdks/webhooks/README.md#webhooksdelete) - Delete a webhook endpoint
+- [`webhooksWebhooksList`](docs/sdks/webhooks/README.md#webhookslist) - List registered webhooks
+- [`withdrawalsWithdrawalsCreate`](docs/sdks/withdrawals/README.md#withdrawalscreate) - Withdraw unspent funds back to your wallet
+- [`withdrawalsWithdrawalsList`](docs/sdks/withdrawals/README.md#withdrawalslist) - List withdrawal history
 - [`x402X402Discover`](docs/sdks/x402/README.md#x402discover) - Discover x402 payment requirements for a URL
-- [`x402X402Pay`](docs/sdks/x402/README.md#x402pay) - Pay for a service via x402 protocol
 - [`x402X402Receive`](docs/sdks/x402/README.md#x402receive) - Verify and accept an x402 payment
+- ~~[`mppMPPPay`](docs/sdks/mpp/README.md#mpppay)~~ - (Removed) Make a micropayment via MPP protocol :warning: **Deprecated**
+- ~~[`x402X402Pay`](docs/sdks/x402/README.md#x402pay)~~ - (Removed) Pay for a service via x402 protocol :warning: **Deprecated**
 
 </details>
 <!-- End Standalone functions [standalone-funcs] -->
@@ -382,7 +414,7 @@ run();
 **Primary error:**
 * [`Mag3ntError`](./src/models/errors/mag3nt-error.ts): The base class for HTTP error responses.
 
-<details><summary>Less common errors (9)</summary>
+<details><summary>Less common errors (13)</summary>
 
 <br />
 
@@ -395,9 +427,13 @@ run();
 
 
 **Inherit from [`Mag3ntError`](./src/models/errors/mag3nt-error.ts)**:
-* [`ErrorT`](./src/models/errors/error-t.ts): Applicable to 4 of 41 methods.*
-* [`BalanceError`](./src/models/errors/balance-error.ts): Insufficient balance. Status code `403`. Applicable to 2 of 41 methods.*
-* [`GoneError`](./src/models/errors/gone-error.ts): Pay link has been used. Status code `410`. Applicable to 1 of 41 methods.*
+* [`ErrorT`](./src/models/errors/error-t.ts): Applicable to 9 of 51 methods.*
+* [`BalanceError`](./src/models/errors/balance-error.ts): Status code `403`. Applicable to 3 of 51 methods.*
+* [`BadRequestError`](./src/models/errors/bad-request-error.ts): Missing fields or amount too small to cover fee. Status code `400`. Applicable to 1 of 51 methods.*
+* [`ForbiddenError`](./src/models/errors/forbidden-error.ts): Insufficient balance. Status code `403`. Applicable to 1 of 51 methods.*
+* [`X402PayGoneError`](./src/models/errors/x402-pay-gone-error.ts): Endpoint removed. Migrate to /api/pay. Status code `410`. Applicable to 1 of 51 methods.*
+* [`MppPayGoneError`](./src/models/errors/mpp-pay-gone-error.ts): Endpoint removed. Migrate to /api/pay. Status code `410`. Applicable to 1 of 51 methods.*
+* [`PayLinksGetStatusGoneError`](./src/models/errors/pay-links-get-status-gone-error.ts): Pay link has been used. Status code `410`. Applicable to 1 of 51 methods.*
 * [`ResponseValidationError`](./src/models/errors/response-validation-error.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>
