@@ -10,46 +10,68 @@ import * as types from "../../types/primitives.js";
 import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
 
+export type Ap2SettleRequest = {
+  /**
+   * Code of the pay link being settled.
+   */
+  payLinkCode: string;
+  /**
+   * Closed AP2 Payment Mandate (mandate.payment.1) as an SD-JWT.
+   */
+  closedMandate: string;
+  /**
+   * Optional open AP2 mandate; when present the open→closed chain is re-verified.
+   */
+  openMandate?: string | undefined;
+  /**
+   * Token of the payer card named by the mandate (authorizes the debit).
+   */
+  cardToken: string;
+};
+
 export type Ap2SettleAmount = number | string;
 
-export type Ap2SettleRequest = {
-  payerCardId: string;
-  payerCardToken: string;
-  receiverCardId: string;
-  amount: number | string;
-  network?: string | undefined;
-};
+export type Fee = number | string;
+
+export type Ap2SettleNetAmount = number | string;
 
 /**
  * Settlement complete
  */
-export type Ap2SettleResponse = {
-  success?: boolean | undefined;
-  transactionId?: string | undefined;
+export type Ap2SettleResponseBody1 = {
+  /**
+   * SETTLED, or ALREADY_SETTLED on idempotent replay.
+   */
+  status?: string | undefined;
+  protocol?: string | undefined;
+  settlementId?: string | undefined;
+  /**
+   * The mandate jti the settlement is keyed on.
+   */
+  mandateId?: string | undefined;
+  payLinkCode?: string | undefined;
+  amount?: number | string | undefined;
+  fee?: number | string | undefined;
+  netAmount?: number | string | undefined;
+  txHash?: string | null | undefined;
+  payee?: string | undefined;
 };
 
-/** @internal */
-export type Ap2SettleAmount$Outbound = number | string;
+/**
+ * Mandate already settled (idempotent replay)
+ */
+export type Ap2SettleResponseBody2 = {
+  status?: string | undefined;
+};
 
-/** @internal */
-export const Ap2SettleAmount$outboundSchema: z.ZodMiniType<
-  Ap2SettleAmount$Outbound,
-  Ap2SettleAmount
-> = smartUnion([z.number(), z.string()]);
-
-export function ap2SettleAmountToJSON(
-  ap2SettleAmount: Ap2SettleAmount,
-): string {
-  return JSON.stringify(Ap2SettleAmount$outboundSchema.parse(ap2SettleAmount));
-}
+export type Ap2SettleResponse = Ap2SettleResponseBody1 | Ap2SettleResponseBody2;
 
 /** @internal */
 export type Ap2SettleRequest$Outbound = {
-  payer_card_id: string;
-  payer_card_token: string;
-  receiver_card_id: string;
-  amount: number | string;
-  network: string;
+  pay_link_code: string;
+  closed_mandate: string;
+  open_mandate?: string | undefined;
+  card_token: string;
 };
 
 /** @internal */
@@ -58,17 +80,17 @@ export const Ap2SettleRequest$outboundSchema: z.ZodMiniType<
   Ap2SettleRequest
 > = z.pipe(
   z.object({
-    payerCardId: z.string(),
-    payerCardToken: z.string(),
-    receiverCardId: z.string(),
-    amount: smartUnion([z.number(), z.string()]),
-    network: z._default(z.string(), "eip155:8453"),
+    payLinkCode: z.string(),
+    closedMandate: z.string(),
+    openMandate: z.optional(z.string()),
+    cardToken: z.string(),
   }),
   z.transform((v) => {
     return remap$(v, {
-      payerCardId: "payer_card_id",
-      payerCardToken: "payer_card_token",
-      receiverCardId: "receiver_card_id",
+      payLinkCode: "pay_link_code",
+      closedMandate: "closed_mandate",
+      openMandate: "open_mandate",
+      cardToken: "card_token",
     });
   }),
 );
@@ -82,20 +104,117 @@ export function ap2SettleRequestToJSON(
 }
 
 /** @internal */
-export const Ap2SettleResponse$inboundSchema: z.ZodMiniType<
-  Ap2SettleResponse,
+export const Ap2SettleAmount$inboundSchema: z.ZodMiniType<
+  Ap2SettleAmount,
+  unknown
+> = smartUnion([types.number(), types.string()]);
+
+export function ap2SettleAmountFromJSON(
+  jsonString: string,
+): SafeParseResult<Ap2SettleAmount, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Ap2SettleAmount$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Ap2SettleAmount' from JSON`,
+  );
+}
+
+/** @internal */
+export const Fee$inboundSchema: z.ZodMiniType<Fee, unknown> = smartUnion([
+  types.number(),
+  types.string(),
+]);
+
+export function feeFromJSON(
+  jsonString: string,
+): SafeParseResult<Fee, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Fee$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Fee' from JSON`,
+  );
+}
+
+/** @internal */
+export const Ap2SettleNetAmount$inboundSchema: z.ZodMiniType<
+  Ap2SettleNetAmount,
+  unknown
+> = smartUnion([types.number(), types.string()]);
+
+export function ap2SettleNetAmountFromJSON(
+  jsonString: string,
+): SafeParseResult<Ap2SettleNetAmount, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Ap2SettleNetAmount$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Ap2SettleNetAmount' from JSON`,
+  );
+}
+
+/** @internal */
+export const Ap2SettleResponseBody1$inboundSchema: z.ZodMiniType<
+  Ap2SettleResponseBody1,
   unknown
 > = z.pipe(
   z.object({
-    success: types.optional(types.boolean()),
-    transaction_id: types.optional(types.string()),
+    status: types.optional(types.string()),
+    protocol: types.optional(types.string()),
+    settlement_id: types.optional(types.string()),
+    mandate_id: types.optional(types.string()),
+    pay_link_code: types.optional(types.string()),
+    amount: types.optional(smartUnion([types.number(), types.string()])),
+    fee: types.optional(smartUnion([types.number(), types.string()])),
+    net_amount: types.optional(smartUnion([types.number(), types.string()])),
+    tx_hash: z.optional(z.nullable(types.string())),
+    payee: types.optional(types.string()),
   }),
   z.transform((v) => {
     return remap$(v, {
-      "transaction_id": "transactionId",
+      "settlement_id": "settlementId",
+      "mandate_id": "mandateId",
+      "pay_link_code": "payLinkCode",
+      "net_amount": "netAmount",
+      "tx_hash": "txHash",
     });
   }),
 );
+
+export function ap2SettleResponseBody1FromJSON(
+  jsonString: string,
+): SafeParseResult<Ap2SettleResponseBody1, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Ap2SettleResponseBody1$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Ap2SettleResponseBody1' from JSON`,
+  );
+}
+
+/** @internal */
+export const Ap2SettleResponseBody2$inboundSchema: z.ZodMiniType<
+  Ap2SettleResponseBody2,
+  unknown
+> = z.object({
+  status: types.optional(types.string()),
+});
+
+export function ap2SettleResponseBody2FromJSON(
+  jsonString: string,
+): SafeParseResult<Ap2SettleResponseBody2, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Ap2SettleResponseBody2$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Ap2SettleResponseBody2' from JSON`,
+  );
+}
+
+/** @internal */
+export const Ap2SettleResponse$inboundSchema: z.ZodMiniType<
+  Ap2SettleResponse,
+  unknown
+> = smartUnion([
+  z.lazy(() => Ap2SettleResponseBody1$inboundSchema),
+  z.lazy(() => Ap2SettleResponseBody2$inboundSchema),
+]);
 
 export function ap2SettleResponseFromJSON(
   jsonString: string,

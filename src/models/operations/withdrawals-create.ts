@@ -55,7 +55,7 @@ export type WithdrawalFee = number | string;
 /**
  * Amount sent on-chain (amount - fee)
  */
-export type NetAmount = number | string;
+export type WithdrawalsCreateNetAmount = number | string;
 
 /**
  * Withdrawal initiated
@@ -243,16 +243,18 @@ export function withdrawalFeeFromJSON(
 }
 
 /** @internal */
-export const NetAmount$inboundSchema: z.ZodMiniType<NetAmount, unknown> =
-  smartUnion([types.number(), types.string()]);
+export const WithdrawalsCreateNetAmount$inboundSchema: z.ZodMiniType<
+  WithdrawalsCreateNetAmount,
+  unknown
+> = smartUnion([types.number(), types.string()]);
 
-export function netAmountFromJSON(
+export function withdrawalsCreateNetAmountFromJSON(
   jsonString: string,
-): SafeParseResult<NetAmount, SDKValidationError> {
+): SafeParseResult<WithdrawalsCreateNetAmount, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => NetAmount$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'NetAmount' from JSON`,
+    (x) => WithdrawalsCreateNetAmount$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'WithdrawalsCreateNetAmount' from JSON`,
   );
 }
 

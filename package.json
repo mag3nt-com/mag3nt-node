@@ -1,6 +1,6 @@
 {
   "name": "@mag3nt/sdk",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "author": "mag3nt",
   "type": "module",
   "main": "./esm/index.js",

@@ -6,19 +6,17 @@
 import { Ap2SettleRequest } from "@mag3nt/sdk/models/operations";
 
 let value: Ap2SettleRequest = {
-  payerCardId: "<id>",
-  payerCardToken: "<value>",
-  receiverCardId: "<id>",
-  amount: 9522.75,
+  payLinkCode: "pl_a1b2c3d4",
+  closedMandate: "<value>",
+  cardToken: "<value>",
 };
 ```
 
 ## Fields
 
-| Field                        | Type                         | Required                     | Description                  |
-| ---------------------------- | ---------------------------- | ---------------------------- | ---------------------------- |
-| `payerCardId`                | *string*                     | :heavy_check_mark:           | N/A                          |
-| `payerCardToken`             | *string*                     | :heavy_check_mark:           | N/A                          |
-| `receiverCardId`             | *string*                     | :heavy_check_mark:           | N/A                          |
-| `amount`                     | *operations.Ap2SettleAmount* | :heavy_check_mark:           | N/A                          |
-| `network`                    | *string*                     | :heavy_minus_sign:           | N/A                          |
+| Field                                                                         | Type                                                                          | Required                                                                      | Description                                                                   | Example                                                                       |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `payLinkCode`                                                                 | *string*                                                                      | :heavy_check_mark:                                                            | Code of the pay link being settled.                                           | pl_a1b2c3d4                                                                   |
+| `closedMandate`                                                               | *string*                                                                      | :heavy_check_mark:                                                            | Closed AP2 Payment Mandate (mandate.payment.1) as an SD-JWT.                  |                                                                               |
+| `openMandate`                                                                 | *string*                                                                      | :heavy_minus_sign:                                                            | Optional open AP2 mandate; when present the open→closed chain is re-verified. |                                                                               |
+| `cardToken`                                                                   | *string*                                                                      | :heavy_check_mark:                                                            | Token of the payer card named by the mandate (authorizes the debit).          |                                                                               |

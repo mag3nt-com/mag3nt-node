@@ -1,0 +1,19 @@
+# WithdrawalsCreateNetAmount
+
+Amount sent on-chain (amount - fee)
+
+
+## Supported Types
+
+### `number`
+
+```typescript
+const value: number = 1284.03;
+```
+
+### `string`
+
+```typescript
+const value: string = "<value>";
+```
+
