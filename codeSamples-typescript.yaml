@@ -121,10 +121,9 @@ actions:
 
             async function run() {
               const result = await mag3nt.ap2.ap2Settle({
-                payerCardId: "<id>",
-                payerCardToken: "<value>",
-                receiverCardId: "<id>",
-                amount: 5732.53,
+                payLinkCode: "pl_a1b2c3d4",
+                closedMandate: "<value>",
+                cardToken: "<value>",
               });
 
               console.log(result);

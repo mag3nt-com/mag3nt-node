@@ -146,7 +146,7 @@ run();
 * [ap2CreateMandate](docs/sdks/ap2/README.md#ap2createmandate) - Create a spending mandate for recurring AP2 payments
 * [ap2Execute](docs/sdks/ap2/README.md#ap2execute) - Execute a payment against an AP2 mandate
 * [ap2ListMandates](docs/sdks/ap2/README.md#ap2listmandates) - List mandates for a card
-* [ap2Settle](docs/sdks/ap2/README.md#ap2settle) - Settle an AP2 payment between agents
+* [ap2Settle](docs/sdks/ap2/README.md#ap2settle) - Settle a pay link with a closed AP2 Payment Mandate
 
 ### [Cards](docs/sdks/cards/README.md)
 
@@ -249,7 +249,7 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`ap2Ap2GetAgentCard`](docs/sdks/ap2/README.md#ap2getagentcard) - Get the default agent card for AP2 payments
 - [`ap2Ap2ListMandates`](docs/sdks/ap2/README.md#ap2listmandates) - List mandates for a card
 - [`ap2Ap2ListPaymentMethods`](docs/sdks/ap2/README.md#ap2listpaymentmethods) - List available payment methods for AP2
-- [`ap2Ap2Settle`](docs/sdks/ap2/README.md#ap2settle) - Settle an AP2 payment between agents
+- [`ap2Ap2Settle`](docs/sdks/ap2/README.md#ap2settle) - Settle a pay link with a closed AP2 Payment Mandate
 - [`cardsCardsBulkCreate`](docs/sdks/cards/README.md#cardsbulkcreate) - Issue multiple cards in a single atomic request
 - [`cardsCardsClaim`](docs/sdks/cards/README.md#cardsclaim) - Claim a card using its token
 - [`cardsCardsCreate`](docs/sdks/cards/README.md#cardscreate) - Issue a new virtual payment card

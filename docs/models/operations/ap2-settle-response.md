@@ -1,18 +1,22 @@
 # Ap2SettleResponse
 
-Settlement complete
 
-## Example Usage
+## Supported Types
+
+### `operations.Ap2SettleResponseBody1`
 
 ```typescript
-import { Ap2SettleResponse } from "@mag3nt/sdk/models/operations";
-
-let value: Ap2SettleResponse = {};
+const value: operations.Ap2SettleResponseBody1 = {
+  status: "SETTLED",
+  protocol: "ap2",
+};
 ```
 
-## Fields
+### `operations.Ap2SettleResponseBody2`
 
-| Field              | Type               | Required           | Description        |
-| ------------------ | ------------------ | ------------------ | ------------------ |
-| `success`          | *boolean*          | :heavy_minus_sign: | N/A                |
-| `transactionId`    | *string*           | :heavy_minus_sign: | N/A                |
+```typescript
+const value: operations.Ap2SettleResponseBody2 = {
+  status: "ALREADY_SETTLED",
+};
+```
+

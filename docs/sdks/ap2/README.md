@@ -11,7 +11,7 @@ Agent-to-Agent Payment Protocol
 * [ap2CreateMandate](#ap2createmandate) - Create a spending mandate for recurring AP2 payments
 * [ap2Execute](#ap2execute) - Execute a payment against an AP2 mandate
 * [ap2ListMandates](#ap2listmandates) - List mandates for a card
-* [ap2Settle](#ap2settle) - Settle an AP2 payment between agents
+* [ap2Settle](#ap2settle) - Settle a pay link with a closed AP2 Payment Mandate
 
 ## ap2GetAgentCard
 
@@ -376,7 +376,7 @@ run();
 
 ## ap2Settle
 
-Completes a peer-to-peer payment between two agent cards. Debits the payer card and credits the receiver card atomically.
+Settles a mag3nt pay link by consuming a closed AP2 Payment Mandate (`mandate.payment.1`). The mandate is verified for signature, expiry, and payee scoping against the link; if an open mandate is supplied, the open→closed chain is re-verified. The payer card named by the mandate is authenticated via its card token, then the payer card is debited and the link credited atomically. Idempotent on the mandate `jti` (replay-safe).
 
 
 ### Example Usage
@@ -391,10 +391,9 @@ const mag3nt = new Mag3nt({
 
 async function run() {
   const result = await mag3nt.ap2.ap2Settle({
-    payerCardId: "<id>",
-    payerCardToken: "<value>",
-    receiverCardId: "<id>",
-    amount: 5732.53,
+    payLinkCode: "pl_a1b2c3d4",
+    closedMandate: "<value>",
+    cardToken: "<value>",
   });
 
   console.log(result);
@@ -419,10 +418,9 @@ const mag3nt = new Mag3ntCore({
 
 async function run() {
   const res = await ap2Ap2Settle(mag3nt, {
-    payerCardId: "<id>",
-    payerCardToken: "<value>",
-    receiverCardId: "<id>",
-    amount: 5732.53,
+    payLinkCode: "pl_a1b2c3d4",
+    closedMandate: "<value>",
+    cardToken: "<value>",
   });
   if (res.ok) {
     const { value: result } = res;
@@ -452,5 +450,5 @@ run();
 
 | Error Type                | Status Code               | Content Type              |
 | ------------------------- | ------------------------- | ------------------------- |
-| errors.ErrorT             | 403                       | application/json          |
+| errors.ErrorT             | 400, 401, 404, 422        | application/json          |
 | errors.Mag3ntDefaultError | 4XX, 5XX                  | \*/\*                     |

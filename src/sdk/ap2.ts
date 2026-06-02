@@ -80,10 +80,10 @@ export class Ap2 extends ClientSDK {
   }
 
   /**
-   * Settle an AP2 payment between agents
+   * Settle a pay link with a closed AP2 Payment Mandate
    *
    * @remarks
-   * Completes a peer-to-peer payment between two agent cards. Debits the payer card and credits the receiver card atomically.
+   * Settles a mag3nt pay link by consuming a closed AP2 Payment Mandate (`mandate.payment.1`). The mandate is verified for signature, expiry, and payee scoping against the link; if an open mandate is supplied, the open→closed chain is re-verified. The payer card named by the mandate is authenticated via its card token, then the payer card is debited and the link credited atomically. Idempotent on the mandate `jti` (replay-safe).
    */
   async ap2Settle(
     request: operations.Ap2SettleRequest,

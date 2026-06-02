@@ -28,10 +28,10 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Settle an AP2 payment between agents
+ * Settle a pay link with a closed AP2 Payment Mandate
  *
  * @remarks
- * Completes a peer-to-peer payment between two agent cards. Debits the payer card and credits the receiver card atomically.
+ * Settles a mag3nt pay link by consuming a closed AP2 Payment Mandate (`mandate.payment.1`). The mandate is verified for signature, expiry, and payee scoping against the link; if an open mandate is supplied, the open→closed chain is re-verified. The payer card named by the mandate is authenticated via its card token, then the payer card is debited and the link credited atomically. Idempotent on the mandate `jti` (replay-safe).
  */
 export function ap2Ap2Settle(
   client: Mag3ntCore,
@@ -170,7 +170,8 @@ async function $do(
     | SDKValidationError
   >(
     M.json(200, operations.Ap2SettleResponse$inboundSchema),
-    M.jsonErr(403, errors.ErrorT$inboundSchema),
+    M.json(201, operations.Ap2SettleResponse$inboundSchema),
+    M.jsonErr([400, 401, 404, 422], errors.ErrorT$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),
   )(response, req, { extraFields: responseFields });
