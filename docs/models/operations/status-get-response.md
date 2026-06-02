@@ -11,6 +11,14 @@ let value: StatusGetResponse = {
   platform: "mag3nt",
   version: "0.5.0",
   model: "bidirectional",
+  protocols: {
+    x402: {
+      spend: "/api/pay",
+    },
+    mpp: {
+      spend: "/api/pay",
+    },
+  },
 };
 ```
 

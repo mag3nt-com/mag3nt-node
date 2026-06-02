@@ -11,6 +11,7 @@ Agent-to-Agent Payment Protocol
 * [ap2CreateMandate](#ap2createmandate) - Create a spending mandate for recurring AP2 payments
 * [ap2Execute](#ap2execute) - Execute a payment against an AP2 mandate
 * [ap2ListMandates](#ap2listmandates) - List mandates for a card
+* [ap2Settle](#ap2settle) - Settle an AP2 payment between agents
 
 ## ap2GetAgentCard
 
@@ -371,4 +372,85 @@ run();
 
 | Error Type                | Status Code               | Content Type              |
 | ------------------------- | ------------------------- | ------------------------- |
+| errors.Mag3ntDefaultError | 4XX, 5XX                  | \*/\*                     |
+
+## ap2Settle
+
+Completes a peer-to-peer payment between two agent cards. Debits the payer card and credits the receiver card atomically.
+
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="ap2Settle" method="post" path="/api/ap2/settle" -->
+```typescript
+import { Mag3nt } from "@mag3nt/sdk";
+
+const mag3nt = new Mag3nt({
+  apiKeyAuth: "<YOUR_API_KEY_HERE>",
+});
+
+async function run() {
+  const result = await mag3nt.ap2.ap2Settle({
+    payerCardId: "<id>",
+    payerCardToken: "<value>",
+    receiverCardId: "<id>",
+    amount: 5732.53,
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { Mag3ntCore } from "@mag3nt/sdk/core.js";
+import { ap2Ap2Settle } from "@mag3nt/sdk/funcs/ap2-ap2-settle.js";
+
+// Use `Mag3ntCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const mag3nt = new Mag3ntCore({
+  apiKeyAuth: "<YOUR_API_KEY_HERE>",
+});
+
+async function run() {
+  const res = await ap2Ap2Settle(mag3nt, {
+    payerCardId: "<id>",
+    payerCardToken: "<value>",
+    receiverCardId: "<id>",
+    amount: 5732.53,
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("ap2Ap2Settle failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.Ap2SettleRequest](../../models/operations/ap2-settle-request.md)                                                                                                   | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[operations.Ap2SettleResponse](../../models/operations/ap2-settle-response.md)\>**
+
+### Errors
+
+| Error Type                | Status Code               | Content Type              |
+| ------------------------- | ------------------------- | ------------------------- |
+| errors.ErrorT             | 403                       | application/json          |
 | errors.Mag3ntDefaultError | 4XX, 5XX                  | \*/\*                     |

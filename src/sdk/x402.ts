@@ -11,18 +11,18 @@ import { unwrapAsync } from "../types/fp.js";
 
 export class X402 extends ClientSDK {
   /**
-   * Pay for a service via x402 protocol
+   * (Removed) Pay for a service via x402 protocol
    *
    * @remarks
-   * Authorizes a payment against a funded card. The card must be ACTIVE with sufficient allocation. Returns payment headers the agent can attach to retry the original 402 request.
+   * This proprietary push endpoint has been removed. Use POST /api/pay with { card_id, card_token, url } instead. It automatically detects x402 and settles on-chain.
+   *
+   * @deprecated method: This will be removed in a future release, please migrate away from it as soon as possible.
    */
   async x402Pay(
-    request: operations.X402PayRequest,
     options?: RequestOptions,
-  ): Promise<operations.X402PayResponse> {
+  ): Promise<void> {
     return unwrapAsync(x402X402Pay(
       this,
-      request,
       options,
     ));
   }

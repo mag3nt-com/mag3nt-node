@@ -27,7 +27,7 @@ import { Result } from "../types/fp.js";
  * Generate a new API key
  *
  * @remarks
- * Returns the raw key once. Store it securely — it cannot be retrieved again.
+ * Returns the raw key once. Store it securely: it cannot be retrieved again.
  */
 export function keysKeysCreate(
   client: Mag3ntCore,

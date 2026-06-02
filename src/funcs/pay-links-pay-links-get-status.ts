@@ -37,7 +37,7 @@ export function payLinksPayLinksGetStatus(
   Result<
     operations.PayLinksGetStatusResponse,
     | errors.ErrorT
-    | errors.GoneError
+    | errors.PayLinksGetStatusGoneError
     | Mag3ntError
     | ResponseValidationError
     | ConnectionError
@@ -64,7 +64,7 @@ async function $do(
     Result<
       operations.PayLinksGetStatusResponse,
       | errors.ErrorT
-      | errors.GoneError
+      | errors.PayLinksGetStatusGoneError
       | Mag3ntError
       | ResponseValidationError
       | ConnectionError
@@ -163,7 +163,7 @@ async function $do(
   const [result] = await M.match<
     operations.PayLinksGetStatusResponse,
     | errors.ErrorT
-    | errors.GoneError
+    | errors.PayLinksGetStatusGoneError
     | Mag3ntError
     | ResponseValidationError
     | ConnectionError
@@ -175,7 +175,7 @@ async function $do(
   >(
     M.json(200, operations.PayLinksGetStatusResponse$inboundSchema),
     M.jsonErr(404, errors.ErrorT$inboundSchema),
-    M.jsonErr(410, errors.GoneError$inboundSchema),
+    M.jsonErr(410, errors.PayLinksGetStatusGoneError$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),
   )(response, req, { extraFields: responseFields });

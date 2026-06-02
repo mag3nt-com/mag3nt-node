@@ -107,6 +107,30 @@ actions:
             }
 
             run();
+  - target: $["paths"]["/api/ap2/settle"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: ap2Settle
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.ap2.ap2Settle({
+                payerCardId: "<id>",
+                payerCardToken: "<value>",
+                receiverCardId: "<id>",
+                amount: 5732.53,
+              });
+
+              console.log(result);
+            }
+
+            run();
   - target: $["paths"]["/api/balance"]["get"]
     update:
       x-codeSamples:
@@ -204,6 +228,27 @@ actions:
             }
 
             run();
+  - target: $["paths"]["/api/cards/{id}/fund"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: cardsTopUp
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.cards.cardsTopUp("<id>", {
+                amount: 25,
+              });
+
+              console.log(result);
+            }
+
+            run();
   - target: $["paths"]["/api/cards/{id}/transactions"]["get"]
     update:
       x-codeSamples:
@@ -254,6 +299,27 @@ actions:
 
             async function run() {
               const result = await mag3nt.status.statusGetConfig();
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/fund/verify"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: fundingVerify
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.funding.fundingVerify({
+                txHash: "<value>",
+              });
 
               console.log(result);
             }
@@ -414,29 +480,6 @@ actions:
             }
 
             run();
-  - target: $["paths"]["/api/mpp/pay"]["post"]
-    update:
-      x-codeSamples:
-        - lang: typescript
-          label: mppPay
-          source: |-
-            import { Mag3nt } from "@mag3nt/sdk";
-
-            const mag3nt = new Mag3nt({
-              apiKeyAuth: "<YOUR_API_KEY_HERE>",
-            });
-
-            async function run() {
-              const result = await mag3nt.mpp.mppPay({
-                cardId: "<id>",
-                cardToken: "<value>",
-                amount: "345.29",
-              });
-
-              console.log(result);
-            }
-
-            run();
   - target: $["paths"]["/api/mpp/receive"]["post"]
     update:
       x-codeSamples:
@@ -561,6 +604,29 @@ actions:
 
             async function run() {
               const result = await mag3nt.mpp.mppStreamsGet("<id>");
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/pay"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: paymentsExecute
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.payments.paymentsExecute({
+                cardId: "sx_a66a6666-...",
+                cardToken: "tok_3b9fe670-...",
+                url: "https://api.weather.com/forecast",
+              });
 
               console.log(result);
             }
@@ -746,6 +812,126 @@ actions:
             }
 
             run();
+  - target: $["paths"]["/api/wallet/balance"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: fundingGetWalletBalance
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.funding.fundingGetWalletBalance("eip155:8453", "USDC");
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/webhooks"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: webhooksList
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.webhooks.webhooksList();
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/webhooks"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: webhooksCreate
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.webhooks.webhooksCreate({
+                url: "https://api.acme.com/hooks/mag3nt",
+              });
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/webhooks/{id}"]["delete"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: webhooksDelete
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.webhooks.webhooksDelete("<id>");
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/withdraw"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: withdrawalsCreate
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.withdrawals.withdrawalsCreate({
+                amount: 50,
+                network: "eip155:8453",
+                asset: "USDC",
+              });
+
+              console.log(result);
+            }
+
+            run();
+  - target: $["paths"]["/api/withdrawals"]["get"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: withdrawalsList
+          source: |-
+            import { Mag3nt } from "@mag3nt/sdk";
+
+            const mag3nt = new Mag3nt({
+              apiKeyAuth: "<YOUR_API_KEY_HERE>",
+            });
+
+            async function run() {
+              const result = await mag3nt.withdrawals.withdrawalsList();
+
+              console.log(result);
+            }
+
+            run();
   - target: $["paths"]["/api/x402/discover"]["get"]
     update:
       x-codeSamples:
@@ -760,31 +946,6 @@ actions:
 
             async function run() {
               const result = await mag3nt.x402.x402Discover("https://happy-fireplace.name/");
-
-              console.log(result);
-            }
-
-            run();
-  - target: $["paths"]["/api/x402/pay"]["post"]
-    update:
-      x-codeSamples:
-        - lang: typescript
-          label: x402Pay
-          source: |-
-            import { Mag3nt } from "@mag3nt/sdk";
-
-            const mag3nt = new Mag3nt({
-              apiKeyAuth: "<YOUR_API_KEY_HERE>",
-            });
-
-            async function run() {
-              const result = await mag3nt.x402.x402Pay({
-                cardId: "sx_a66a6666-...",
-                cardToken: "tok_3b9fe670-...",
-                amount: 0.5,
-                merchant: "weather-api.com",
-                merchantAddress: "0xABC...",
-              });
 
               console.log(result);
             }

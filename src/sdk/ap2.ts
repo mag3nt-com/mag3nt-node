@@ -7,6 +7,7 @@ import { ap2Ap2Execute } from "../funcs/ap2-ap2-execute.js";
 import { ap2Ap2GetAgentCard } from "../funcs/ap2-ap2-get-agent-card.js";
 import { ap2Ap2ListMandates } from "../funcs/ap2-ap2-list-mandates.js";
 import { ap2Ap2ListPaymentMethods } from "../funcs/ap2-ap2-list-payment-methods.js";
+import { ap2Ap2Settle } from "../funcs/ap2-ap2-settle.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as operations from "../models/operations/index.js";
 import { unwrapAsync } from "../types/fp.js";
@@ -74,6 +75,23 @@ export class Ap2 extends ClientSDK {
     return unwrapAsync(ap2Ap2ListMandates(
       this,
       cardId,
+      options,
+    ));
+  }
+
+  /**
+   * Settle an AP2 payment between agents
+   *
+   * @remarks
+   * Completes a peer-to-peer payment between two agent cards. Debits the payer card and credits the receiver card atomically.
+   */
+  async ap2Settle(
+    request: operations.Ap2SettleRequest,
+    options?: RequestOptions,
+  ): Promise<operations.Ap2SettleResponse> {
+    return unwrapAsync(ap2Ap2Settle(
+      this,
+      request,
       options,
     ));
   }

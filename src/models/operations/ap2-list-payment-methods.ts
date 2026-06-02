@@ -10,7 +10,7 @@ import * as types from "../../types/primitives.js";
 import { smartUnion } from "../../types/smart-union.js";
 import { SDKValidationError } from "../errors/sdk-validation-error.js";
 
-export type Available = number | string;
+export type Ap2ListPaymentMethodsAvailable = number | string;
 
 export type Method = {
   type?: string | undefined;
@@ -26,16 +26,18 @@ export type Ap2ListPaymentMethodsResponse = {
 };
 
 /** @internal */
-export const Available$inboundSchema: z.ZodMiniType<Available, unknown> =
-  smartUnion([types.number(), types.string()]);
+export const Ap2ListPaymentMethodsAvailable$inboundSchema: z.ZodMiniType<
+  Ap2ListPaymentMethodsAvailable,
+  unknown
+> = smartUnion([types.number(), types.string()]);
 
-export function availableFromJSON(
+export function ap2ListPaymentMethodsAvailableFromJSON(
   jsonString: string,
-): SafeParseResult<Available, SDKValidationError> {
+): SafeParseResult<Ap2ListPaymentMethodsAvailable, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => Available$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'Available' from JSON`,
+    (x) => Ap2ListPaymentMethodsAvailable$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Ap2ListPaymentMethodsAvailable' from JSON`,
   );
 }
 

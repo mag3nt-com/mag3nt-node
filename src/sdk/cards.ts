@@ -8,6 +8,7 @@ import { cardsCardsCreate } from "../funcs/cards-cards-create.js";
 import { cardsCardsFreeze } from "../funcs/cards-cards-freeze.js";
 import { cardsCardsListTransactions } from "../funcs/cards-cards-list-transactions.js";
 import { cardsCardsList } from "../funcs/cards-cards-list.js";
+import { cardsCardsTopUp } from "../funcs/cards-cards-top-up.js";
 import { cardsCardsUnfreeze } from "../funcs/cards-cards-unfreeze.js";
 import { cardsCardsUpdateControls } from "../funcs/cards-cards-update-controls.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
@@ -134,6 +135,25 @@ export class Cards extends ClientSDK {
     return unwrapAsync(cardsCardsListTransactions(
       this,
       id,
+      options,
+    ));
+  }
+
+  /**
+   * Add funds to an existing card from treasury balance
+   *
+   * @remarks
+   * Top up an ACTIVE card by allocating additional USDC from your treasury balance. The allocation is atomic: insufficient balance returns 403.
+   */
+  async cardsTopUp(
+    id: string,
+    body: operations.CardsTopUpRequestBody,
+    options?: RequestOptions,
+  ): Promise<operations.CardsTopUpResponse> {
+    return unwrapAsync(cardsCardsTopUp(
+      this,
+      id,
+      body,
       options,
     ));
   }

@@ -14,6 +14,7 @@ Virtual payment card lifecycle
 * [cardsClaim](#cardsclaim) - Claim a card using its token
 * [cardsUpdateControls](#cardsupdatecontrols) - Update card spending controls
 * [cardsListTransactions](#cardslisttransactions) - List transactions for a card
+* [cardsTopUp](#cardstopup) - Add funds to an existing card from treasury balance
 
 ## cardsList
 
@@ -587,4 +588,81 @@ run();
 
 | Error Type                | Status Code               | Content Type              |
 | ------------------------- | ------------------------- | ------------------------- |
+| errors.Mag3ntDefaultError | 4XX, 5XX                  | \*/\*                     |
+
+## cardsTopUp
+
+Top up an ACTIVE card by allocating additional USDC from your treasury balance. The allocation is atomic: insufficient balance returns 403.
+
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="cardsTopUp" method="post" path="/api/cards/{id}/fund" -->
+```typescript
+import { Mag3nt } from "@mag3nt/sdk";
+
+const mag3nt = new Mag3nt({
+  apiKeyAuth: "<YOUR_API_KEY_HERE>",
+});
+
+async function run() {
+  const result = await mag3nt.cards.cardsTopUp("<id>", {
+    amount: 25,
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { Mag3ntCore } from "@mag3nt/sdk/core.js";
+import { cardsCardsTopUp } from "@mag3nt/sdk/funcs/cards-cards-top-up.js";
+
+// Use `Mag3ntCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const mag3nt = new Mag3ntCore({
+  apiKeyAuth: "<YOUR_API_KEY_HERE>",
+});
+
+async function run() {
+  const res = await cardsCardsTopUp(mag3nt, "<id>", {
+    amount: 25,
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("cardsCardsTopUp failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `id`                                                                                                                                                                           | *string*                                                                                                                                                                       | :heavy_check_mark:                                                                                                                                                             | N/A                                                                                                                                                                            |
+| `body`                                                                                                                                                                         | [operations.CardsTopUpRequestBody](../../models/operations/cards-top-up-request-body.md)                                                                                       | :heavy_check_mark:                                                                                                                                                             | N/A                                                                                                                                                                            |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[operations.CardsTopUpResponse](../../models/operations/cards-top-up-response.md)\>**
+
+### Errors
+
+| Error Type                | Status Code               | Content Type              |
+| ------------------------- | ------------------------- | ------------------------- |
+| errors.BalanceError       | 403                       | application/json          |
+| errors.ErrorT             | 404                       | application/json          |
 | errors.Mag3ntDefaultError | 4XX, 5XX                  | \*/\*                     |

@@ -351,11 +351,11 @@ run();
 
 ### Errors
 
-| Error Type                | Status Code               | Content Type              |
-| ------------------------- | ------------------------- | ------------------------- |
-| errors.ErrorT             | 404                       | application/json          |
-| errors.GoneError          | 410                       | application/json          |
-| errors.Mag3ntDefaultError | 4XX, 5XX                  | \*/\*                     |
+| Error Type                        | Status Code                       | Content Type                      |
+| --------------------------------- | --------------------------------- | --------------------------------- |
+| errors.ErrorT                     | 404                               | application/json                  |
+| errors.PayLinksGetStatusGoneError | 410                               | application/json                  |
+| errors.Mag3ntDefaultError         | 4XX, 5XX                          | \*/\*                             |
 
 ## payLinksResolve
 

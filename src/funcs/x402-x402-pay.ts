@@ -4,11 +4,9 @@
 
 import * as z from "zod/v4-mini";
 import { Mag3ntCore } from "../core.js";
-import { encodeJSON } from "../lib/encodings.js";
 import { matchStatusCode } from "../lib/http.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
-import { safeParse } from "../lib/schemas.js";
 import { RequestOptions } from "../lib/sdks.js";
 import { extractSecurity, resolveGlobalSecurity } from "../lib/security.js";
 import { pathToFunc } from "../lib/url.js";
@@ -23,26 +21,24 @@ import * as errors from "../models/errors/index.js";
 import { Mag3ntError } from "../models/errors/mag3nt-error.js";
 import { ResponseValidationError } from "../models/errors/response-validation-error.js";
 import { SDKValidationError } from "../models/errors/sdk-validation-error.js";
-import * as operations from "../models/operations/index.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Pay for a service via x402 protocol
+ * (Removed) Pay for a service via x402 protocol
  *
  * @remarks
- * Authorizes a payment against a funded card. The card must be ACTIVE with sufficient allocation. Returns payment headers the agent can attach to retry the original 402 request.
+ * This proprietary push endpoint has been removed. Use POST /api/pay with { card_id, card_token, url } instead. It automatically detects x402 and settles on-chain.
  *
- * If set, this operation will use {@link Security.apiKeyAuth} from the global security.
+ * @deprecated method: This will be removed in a future release, please migrate away from it as soon as possible.
  */
 export function x402X402Pay(
   client: Mag3ntCore,
-  request: operations.X402PayRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    operations.X402PayResponse,
-    | errors.ErrorT
+    void,
+    | errors.X402PayGoneError
     | Mag3ntError
     | ResponseValidationError
     | ConnectionError
@@ -55,20 +51,18 @@ export function x402X402Pay(
 > {
   return new APIPromise($do(
     client,
-    request,
     options,
   ));
 }
 
 async function $do(
   client: Mag3ntCore,
-  request: operations.X402PayRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      operations.X402PayResponse,
-      | errors.ErrorT
+      void,
+      | errors.X402PayGoneError
       | Mag3ntError
       | ResponseValidationError
       | ConnectionError
@@ -81,27 +75,15 @@ async function $do(
     APICall,
   ]
 > {
-  const parsed = safeParse(
-    request,
-    (value) => z.parse(operations.X402PayRequest$outboundSchema, value),
-    "Input validation failed",
-  );
-  if (!parsed.ok) {
-    return [parsed, { status: "invalid" }];
-  }
-  const payload = parsed.value;
-  const body = encodeJSON("body", payload, { explode: true });
-
   const path = pathToFunc("/api/x402/pay")();
 
   const headers = new Headers(compactMap({
-    "Content-Type": "application/json",
     Accept: "application/json",
   }));
 
   const secConfig = await extractSecurity(client._options.apiKeyAuth);
   const securityInput = secConfig == null ? {} : { apiKeyAuth: secConfig };
-  const requestSecurity = resolveGlobalSecurity(securityInput, [0]);
+  const requestSecurity = resolveGlobalSecurity(securityInput);
 
   const context = {
     options: client._options,
@@ -134,7 +116,6 @@ async function $do(
     baseURL: options?.serverURL,
     path: path,
     headers: headers,
-    body: body,
     userAgent: client._options.userAgent,
     timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
   }, options);
@@ -160,8 +141,8 @@ async function $do(
   };
 
   const [result] = await M.match<
-    operations.X402PayResponse,
-    | errors.ErrorT
+    void,
+    | errors.X402PayGoneError
     | Mag3ntError
     | ResponseValidationError
     | ConnectionError
@@ -171,8 +152,8 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, operations.X402PayResponse$inboundSchema),
-    M.jsonErr([400, 401, 403, 404], errors.ErrorT$inboundSchema),
+    M.jsonErr(410, errors.X402PayGoneError$inboundSchema),
+    M.nil("2XX", z.void()),
     M.fail("4XX"),
     M.fail("5XX"),
   )(response, req, { extraFields: responseFields });

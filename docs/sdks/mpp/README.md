@@ -6,7 +6,7 @@ Micropayment Protocol with streaming
 
 ### Available Operations
 
-* [mppPay](#mpppay) - Make a micropayment via MPP protocol
+* [~~mppPay~~](#mpppay) - (Removed) Make a micropayment via MPP protocol :warning: **Deprecated**
 * [mppCreateSession](#mppcreatesession) - Create an MPP payment session
 * [mppDiscover](#mppdiscover) - Discover MPP capabilities for a URL
 * [mppReceive](#mppreceive) - Verify and accept an MPP payment
@@ -15,9 +15,12 @@ Micropayment Protocol with streaming
 * [mppStreamsClose](#mppstreamsclose) - Close a payment stream
 * [mppStreamsGet](#mppstreamsget) - Get payment stream details
 
-## mppPay
+## ~~mppPay~~
 
-Make a micropayment via MPP protocol
+This proprietary push endpoint has been removed. Use POST /api/pay with { card_id, card_token, url } instead. It automatically decodes the MPP challenge and settles on-chain.
+
+
+> :warning: **DEPRECATED**: This will be removed in a future release, please migrate away from it as soon as possible.
 
 ### Example Usage
 
@@ -30,13 +33,9 @@ const mag3nt = new Mag3nt({
 });
 
 async function run() {
-  const result = await mag3nt.mpp.mppPay({
-    cardId: "<id>",
-    cardToken: "<value>",
-    amount: "345.29",
-  });
+  await mag3nt.mpp.mppPay();
 
-  console.log(result);
+
 }
 
 run();
@@ -57,14 +56,10 @@ const mag3nt = new Mag3ntCore({
 });
 
 async function run() {
-  const res = await mppMPPPay(mag3nt, {
-    cardId: "<id>",
-    cardToken: "<value>",
-    amount: "345.29",
-  });
+  const res = await mppMPPPay(mag3nt);
   if (res.ok) {
     const { value: result } = res;
-    console.log(result);
+    
   } else {
     console.log("mppMPPPay failed:", res.error);
   }
@@ -77,19 +72,19 @@ run();
 
 | Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.MppPayRequest](../../models/operations/mpp-pay-request.md)                                                                                                         | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
 | `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
 | `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
 | `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
 
 ### Response
 
-**Promise\<[operations.MppPayResponse](../../models/operations/mpp-pay-response.md)\>**
+**Promise\<void\>**
 
 ### Errors
 
 | Error Type                | Status Code               | Content Type              |
 | ------------------------- | ------------------------- | ------------------------- |
+| errors.MppPayGoneError    | 410                       | application/json          |
 | errors.Mag3ntDefaultError | 4XX, 5XX                  | \*/\*                     |
 
 ## mppCreateSession
